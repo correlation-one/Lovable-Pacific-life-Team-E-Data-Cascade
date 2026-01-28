@@ -7,4 +7,5 @@ export { Puppet } from "./Puppet";
 export { ApplicationForm } from "./ApplicationForm";
 export { DocumentUpload } from "./DocumentUpload";
 export { DocumentReview } from "./DocumentReview";
+export { HandoffDashboard } from "./HandoffDashboard";
 export * from "./types";
