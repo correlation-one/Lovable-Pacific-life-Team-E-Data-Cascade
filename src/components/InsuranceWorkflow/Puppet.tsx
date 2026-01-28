@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 interface PuppetProps {
-  type: "client" | "system" | "underwriter" | "document";
+  type: "client" | "system" | "underwriter" | "document" | "ai";
   x: number;
   y: number;
   isActive?: boolean;
@@ -25,6 +25,10 @@ const puppetColors = {
   document: {
     body: "hsl(var(--muted))",
     accent: "hsl(var(--foreground))",
+  },
+  ai: {
+    body: "hsl(280 100% 60%)",
+    accent: "hsl(280 100% 90%)",
   },
 };
 
@@ -364,6 +368,93 @@ export function Puppet({ type, x, y, isActive = false, isError = false, size = 4
             animate={isActive ? { x2: [x + size * 0.2, x + size * 0.15, x + size * 0.2] } : {}}
             transition={{ duration: 0.4, repeat: Infinity, delay: 0.2 }}
           />
+        </>
+      )}
+
+      {type === "ai" && (
+        <>
+          {/* AI puppet - brain/neural network shape */}
+          <motion.g
+            animate={isActive ? { scale: [1, 1.05, 1] } : {}}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            {/* Brain/head shape */}
+            <ellipse
+              cx={x}
+              cy={y - size * 0.1}
+              rx={size * 0.35}
+              ry={size * 0.3}
+              fill={isError ? errorColor : colors.body}
+            />
+            {/* Neural connections */}
+            <motion.circle
+              cx={x - size * 0.15}
+              cy={y - size * 0.15}
+              r={3}
+              fill={colors.accent}
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: 0 }}
+            />
+            <motion.circle
+              cx={x + size * 0.15}
+              cy={y - size * 0.15}
+              r={3}
+              fill={colors.accent}
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}
+            />
+            <motion.circle
+              cx={x}
+              cy={y - size * 0.25}
+              r={3}
+              fill={colors.accent}
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: 0.4 }}
+            />
+            <motion.circle
+              cx={x - size * 0.08}
+              cy={y}
+              r={3}
+              fill={colors.accent}
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: 0.6 }}
+            />
+            <motion.circle
+              cx={x + size * 0.08}
+              cy={y}
+              r={3}
+              fill={colors.accent}
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: 0.3 }}
+            />
+            {/* Connection lines */}
+            <line x1={x - size * 0.15} y1={y - size * 0.15} x2={x} y2={y - size * 0.25} stroke={colors.accent} strokeWidth={1} opacity={0.6} />
+            <line x1={x + size * 0.15} y1={y - size * 0.15} x2={x} y2={y - size * 0.25} stroke={colors.accent} strokeWidth={1} opacity={0.6} />
+            <line x1={x - size * 0.15} y1={y - size * 0.15} x2={x - size * 0.08} y2={y} stroke={colors.accent} strokeWidth={1} opacity={0.6} />
+            <line x1={x + size * 0.15} y1={y - size * 0.15} x2={x + size * 0.08} y2={y} stroke={colors.accent} strokeWidth={1} opacity={0.6} />
+            <line x1={x - size * 0.08} y1={y} x2={x + size * 0.08} y2={y} stroke={colors.accent} strokeWidth={1} opacity={0.6} />
+            {/* Body */}
+            <rect
+              x={x - size * 0.25}
+              y={y + size * 0.2}
+              width={size * 0.5}
+              height={size * 0.3}
+              rx={4}
+              fill={isError ? errorColor : colors.body}
+            />
+            {/* Sparkle effect */}
+            <motion.text
+              x={x}
+              y={y + size * 0.38}
+              textAnchor="middle"
+              fontSize={size * 0.25}
+              fill={colors.accent}
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            >
+              ✦
+            </motion.text>
+          </motion.g>
         </>
       )}
     </motion.g>

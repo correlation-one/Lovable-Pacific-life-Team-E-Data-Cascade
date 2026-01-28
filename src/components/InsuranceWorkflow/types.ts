@@ -6,7 +6,9 @@ export interface WorkflowStep {
   description: string;
   x: number;
   y: number;
-  puppet?: "client" | "system" | "underwriter" | "document";
+  puppet?: "client" | "system" | "underwriter" | "document" | "ai";
+  aiEnabled?: boolean;
+  aiCapability?: string;
 }
 
 export interface Connection {
