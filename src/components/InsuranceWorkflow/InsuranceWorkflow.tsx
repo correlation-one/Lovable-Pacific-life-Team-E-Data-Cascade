@@ -14,7 +14,7 @@ export function InsuranceWorkflow() {
   const [currentStep, setCurrentStep] = useState(0);
   const [activeTab, setActiveTab] = useState("dashboard");
 
-  const totalSteps = 13;
+  const totalSteps = 14;
 
   useEffect(() => {
     if (!isPlaying) return;
