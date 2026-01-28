@@ -119,6 +119,16 @@ const detailedSteps = [
     aiCapability: "Auto-update of structured fields, no manual rekeying"
   },
   { 
+    id: "catalog", 
+    label: "Data Catalog", 
+    description: "Shared repository", 
+    x: 440, 
+    y: 420, 
+    puppet: "system" as const,
+    aiEnabled: false,
+    aiCapability: ""
+  },
+  { 
     id: "reissue", 
     label: "Reissue MVR", 
     description: "New request sent", 
@@ -151,6 +161,7 @@ const connections = [
   { from: "upload", to: "review", path: "M 755 300 L 730 300" },
   { from: "review", to: "correct", path: "M 635 300 L 610 300" },
   { from: "correct", to: "update", path: "M 515 300 L 490 300" },
+  { from: "update", to: "catalog", path: "M 440 345 L 440 375" },
   { from: "update", to: "reissue", path: "M 395 300 L 370 300" },
   { from: "reissue", to: "complete", path: "M 275 300 L 250 300" },
 ];
@@ -172,6 +183,7 @@ const aiStepDetails = [
   "🤖 OCR + LLM extracts and verifies all fields automatically",
   "🤖 Entity resolution corrects discrepancies with predictive suggestions",
   "🤖 System auto-updates with validated information, no manual rekeying",
+  "📚 Validated data synced to shared data catalog for cross-system access",
   "🤖 Autonomous agent triggers new MVR request automatically",
   "🤖 Predictive analytics accelerate final risk assessment → STP",
 ];
@@ -190,13 +202,13 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
   const aiEnabledCount = detailedSteps.filter(s => s.aiEnabled).length;
 
   return (
-    <svg viewBox="0 0 880 520" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+    <svg viewBox="0 0 880 560" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
       {/* Title */}
       <text x="440" y="28" textAnchor="middle" className="fill-foreground text-base font-bold">
         Insurance Underwriting: AI-Enhanced Gap Resolution
       </text>
       <text x="440" y="46" textAnchor="middle" className="fill-muted-foreground text-[10px]">
-        Detailed workflow showing {aiEnabledCount} AI-enabled steps including real-time input validation
+        Detailed workflow showing {aiEnabledCount} AI-enabled steps with shared data catalog integration
       </text>
 
       {/* AI Summary Banner */}
@@ -315,7 +327,7 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
         >
           <rect x="30" y="445" width="820" height="32" rx="6" className="fill-card stroke-border" />
           <text x="440" y="465" textAnchor="middle" className="fill-foreground text-[10px] font-medium">
-            Step {currentStep + 1}/13: {aiStepDetails[Math.min(currentStep, 12)]}
+            Step {currentStep + 1}/14: {aiStepDetails[Math.min(currentStep, 13)]}
           </text>
         </motion.g>
       </AnimatePresence>
@@ -324,7 +336,7 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
       <g transform="translate(640, 490)">
         <rect x="0" y="0" width="200" height="18" rx="4" className="fill-muted/50" />
         <text x="100" y="12" textAnchor="middle" className="fill-muted-foreground text-[8px]">
-          {detailedSteps[Math.min(currentStep, 12)]?.aiEnabled ? "🤖 AI-Assisted Step" : "👤 Manual/System Step"}
+          {detailedSteps[Math.min(currentStep, 13)]?.aiEnabled ? "🤖 AI-Assisted Step" : "👤 Manual/System Step"}
         </text>
       </g>
     </svg>
