@@ -4,4 +4,7 @@ export { DetailedView } from "./DetailedView";
 export { WorkflowNode } from "./WorkflowNode";
 export { WorkflowConnection } from "./WorkflowConnection";
 export { Puppet } from "./Puppet";
+export { ApplicationForm } from "./ApplicationForm";
+export { DocumentUpload } from "./DocumentUpload";
+export { DocumentReview } from "./DocumentReview";
 export * from "./types";
