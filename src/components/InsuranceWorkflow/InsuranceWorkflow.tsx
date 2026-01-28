@@ -10,7 +10,7 @@ export function InsuranceWorkflow() {
   const [currentStep, setCurrentStep] = useState(0);
   const [activeTab, setActiveTab] = useState("executive");
 
-  const totalSteps = 12;
+  const totalSteps = 13;
 
   useEffect(() => {
     if (!isPlaying) return;
