@@ -8,23 +8,43 @@ interface DetailedViewProps {
   hasError: boolean;
 }
 
-// Detailed process steps with AI opportunities
+// Detailed process steps with AI opportunities - 13 steps now
 const detailedSteps = [
+  { 
+    id: "fill", 
+    label: "Fill Application", 
+    description: "Applicant or Agent", 
+    x: 80, 
+    y: 150, 
+    puppet: "client" as const,
+    aiEnabled: false,
+    aiCapability: ""
+  },
+  { 
+    id: "validate", 
+    label: "Auto-Detect", 
+    description: "Real-time validation", 
+    x: 200, 
+    y: 150, 
+    puppet: "ai" as const,
+    aiEnabled: true,
+    aiCapability: "Pattern recognition catches city-state mismatch, DL format errors as user types"
+  },
   { 
     id: "submit", 
     label: "Submit App", 
-    description: "Client applies", 
-    x: 100, 
+    description: "Clean data", 
+    x: 320, 
     y: 150, 
     puppet: "client" as const,
-    aiEnabled: true,
-    aiCapability: "Real-time validation & auto-correction suggestions"
+    aiEnabled: false,
+    aiCapability: ""
   },
   { 
     id: "mvr", 
     label: "Request MVR", 
     description: "Motor Vehicle Report", 
-    x: 250, 
+    x: 440, 
     y: 150, 
     puppet: "ai" as const,
     aiEnabled: true,
@@ -34,7 +54,7 @@ const detailedSteps = [
     id: "error", 
     label: "MVR Failed", 
     description: "DL info errors", 
-    x: 400, 
+    x: 560, 
     y: 150, 
     puppet: "system" as const,
     aiEnabled: false
@@ -42,8 +62,8 @@ const detailedSteps = [
   { 
     id: "detect", 
     label: "Gap Detected", 
-    description: "System identifies gap", 
-    x: 550, 
+    description: "AI classifies issue", 
+    x: 680, 
     y: 150, 
     puppet: "ai" as const,
     aiEnabled: true,
@@ -53,7 +73,7 @@ const detailedSteps = [
     id: "notify", 
     label: "Notify Client", 
     description: "Request documents", 
-    x: 700, 
+    x: 800, 
     y: 150, 
     puppet: "ai" as const,
     aiEnabled: true,
@@ -63,16 +83,16 @@ const detailedSteps = [
     id: "upload", 
     label: "Upload DL", 
     description: "Front & back images", 
-    x: 850, 
-    y: 150, 
+    x: 800, 
+    y: 300, 
     puppet: "document" as const,
     aiEnabled: false
   },
   { 
     id: "review", 
     label: "Review Docs", 
-    description: "Human or automated", 
-    x: 850, 
+    description: "OCR extraction", 
+    x: 680, 
     y: 300, 
     puppet: "ai" as const,
     aiEnabled: true,
@@ -82,7 +102,7 @@ const detailedSteps = [
     id: "correct", 
     label: "Correct Data", 
     description: "Fix discrepancies", 
-    x: 700, 
+    x: 560, 
     y: 300, 
     puppet: "ai" as const,
     aiEnabled: true,
@@ -92,7 +112,7 @@ const detailedSteps = [
     id: "update", 
     label: "Update System", 
     description: "Validated info", 
-    x: 550, 
+    x: 440, 
     y: 300, 
     puppet: "ai" as const,
     aiEnabled: true,
@@ -102,26 +122,17 @@ const detailedSteps = [
     id: "reissue", 
     label: "Reissue MVR", 
     description: "New request sent", 
-    x: 400, 
+    x: 320, 
     y: 300, 
     puppet: "ai" as const,
     aiEnabled: true,
     aiCapability: "Autonomous agents trigger re-order once data confirmed"
   },
   { 
-    id: "receive", 
-    label: "MVR Received", 
-    description: "Report obtained", 
-    x: 250, 
-    y: 300, 
-    puppet: "system" as const,
-    aiEnabled: false
-  },
-  { 
     id: "complete", 
     label: "Continue UW", 
     description: "Underwriting proceeds", 
-    x: 100, 
+    x: 200, 
     y: 300, 
     puppet: "ai" as const,
     aiEnabled: true,
@@ -130,44 +141,46 @@ const detailedSteps = [
 ];
 
 const connections = [
-  { from: "submit", to: "mvr", path: "M 155 150 L 195 150" },
-  { from: "mvr", to: "error", path: "M 305 150 L 345 150", label: "Fails" },
-  { from: "error", to: "detect", path: "M 455 150 L 495 150" },
-  { from: "detect", to: "notify", path: "M 605 150 L 645 150" },
-  { from: "notify", to: "upload", path: "M 755 150 L 795 150" },
-  { from: "upload", to: "review", path: "M 850 205 L 850 245" },
-  { from: "review", to: "correct", path: "M 795 300 L 755 300" },
-  { from: "correct", to: "update", path: "M 645 300 L 605 300" },
-  { from: "update", to: "reissue", path: "M 495 300 L 455 300" },
-  { from: "reissue", to: "receive", path: "M 345 300 L 305 300" },
-  { from: "receive", to: "complete", path: "M 195 300 L 155 300" },
+  { from: "fill", to: "validate", path: "M 130 150 L 150 150" },
+  { from: "validate", to: "submit", path: "M 250 150 L 270 150" },
+  { from: "submit", to: "mvr", path: "M 370 150 L 390 150" },
+  { from: "mvr", to: "error", path: "M 490 150 L 510 150", label: "Fails" },
+  { from: "error", to: "detect", path: "M 610 150 L 630 150" },
+  { from: "detect", to: "notify", path: "M 730 150 L 750 150" },
+  { from: "notify", to: "upload", path: "M 800 195 L 800 255" },
+  { from: "upload", to: "review", path: "M 755 300 L 730 300" },
+  { from: "review", to: "correct", path: "M 635 300 L 610 300" },
+  { from: "correct", to: "update", path: "M 515 300 L 490 300" },
+  { from: "update", to: "reissue", path: "M 395 300 L 370 300" },
+  { from: "reissue", to: "complete", path: "M 275 300 L 250 300" },
 ];
 
 const labelPositions: Record<string, { x: number; y: number }> = {
-  "mvr-error": { x: 325, y: 130 },
+  "mvr-error": { x: 500, y: 130 },
 };
 
 // AI capability details for each step
 const aiStepDetails = [
-  "🤖 Pattern recognition validates DL format before submission",
-  "🤖 Smart ordering infers correct licensing state",
-  "❌ MVR request failed due to data error",
-  "🤖 AI classifies gap: state mismatch detected",
-  "🤖 NLG generates personalized notification to client",
-  "📄 Client uploads driver's license images",
-  "🤖 OCR + LLM extracts and verifies all fields",
-  "🤖 Entity resolution corrects discrepancies automatically",
-  "🤖 System auto-updates with validated information",
-  "🤖 Autonomous agent triggers new MVR request",
-  "✅ Accurate MVR successfully retrieved",
-  "🤖 Predictive analytics accelerate final risk assessment",
+  "📝 Applicant or insurance agent enters application details (name, address, DL info)",
+  "🤖 AI auto-detects errors in real-time: city-state mismatch, invalid DL format, missing fields",
+  "✅ Application submitted with validated, clean data",
+  "🤖 Smart ordering infers correct licensing state from context",
+  "❌ MVR request failed due to remaining data error",
+  "🤖 AI classifies gap: state mismatch, name variance, or expired license detected",
+  "🤖 NLG generates personalized notification requesting correct documentation",
+  "📄 Client uploads front & back of driver's license",
+  "🤖 OCR + LLM extracts and verifies all fields automatically",
+  "🤖 Entity resolution corrects discrepancies with predictive suggestions",
+  "🤖 System auto-updates with validated information, no manual rekeying",
+  "🤖 Autonomous agent triggers new MVR request automatically",
+  "🤖 Predictive analytics accelerate final risk assessment → STP",
 ];
 
 export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
   const getStatus = (index: number): StepStatus => {
     if (index < currentStep) return "complete";
     if (index === currentStep) {
-      if (index === 2 && hasError) return "error";
+      if (index === 4 && hasError) return "error";
       return "active";
     }
     return "pending";
@@ -177,38 +190,57 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
   const aiEnabledCount = detailedSteps.filter(s => s.aiEnabled).length;
 
   return (
-    <svg viewBox="0 0 950 520" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+    <svg viewBox="0 0 880 520" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
       {/* Title */}
-      <text x="475" y="30" textAnchor="middle" className="fill-foreground text-base font-bold">
+      <text x="440" y="28" textAnchor="middle" className="fill-foreground text-base font-bold">
         Insurance Underwriting: AI-Enhanced Gap Resolution
       </text>
-      <text x="475" y="50" textAnchor="middle" className="fill-muted-foreground text-[10px]">
-        Detailed workflow showing {aiEnabledCount} AI-enabled steps for MVR retrieval failure handling
+      <text x="440" y="46" textAnchor="middle" className="fill-muted-foreground text-[10px]">
+        Detailed workflow showing {aiEnabledCount} AI-enabled steps including real-time input validation
       </text>
 
       {/* AI Summary Banner */}
-      <g transform="translate(100, 60)">
+      <g transform="translate(65, 56)">
         <motion.rect
           x="0"
           y="0"
           width="750"
-          height="26"
-          rx="13"
+          height="24"
+          rx="12"
           fill="hsl(280 100% 60% / 0.12)"
           stroke="hsl(280 100% 60% / 0.3)"
           strokeWidth={1}
           animate={{ opacity: [0.8, 1, 0.8] }}
           transition={{ duration: 2.5, repeat: Infinity }}
         />
-        <text x="375" y="18" textAnchor="middle" className="fill-foreground text-[10px] font-medium">
-          ✨ {aiEnabledCount} of 12 steps leverage AI: OCR, LLM extraction, NLG, predictive analytics, autonomous agents
+        <text x="375" y="16" textAnchor="middle" className="fill-foreground text-[9px] font-medium">
+          ✨ {aiEnabledCount} of 13 steps leverage AI: Real-time validation, OCR, LLM, NLG, predictive analytics, autonomous agents
         </text>
       </g>
 
       {/* Phase labels */}
-      <g className="fill-muted-foreground text-[9px] font-mono">
-        <text x="475" y="100" textAnchor="middle">← Initial Request Phase →</text>
-        <text x="475" y="395" textAnchor="middle">← Resolution & Completion Phase →</text>
+      <g className="fill-muted-foreground text-[8px] font-mono">
+        <text x="440" y="92" textAnchor="middle">← Application & Initial Request Phase →</text>
+        <text x="500" y="390" textAnchor="middle">← Resolution & Completion Phase →</text>
+      </g>
+
+      {/* Validation callout */}
+      <g transform="translate(140, 98)">
+        <motion.rect
+          x="0"
+          y="0"
+          width="160"
+          height="18"
+          rx="4"
+          fill="hsl(280 100% 60% / 0.15)"
+          stroke="hsl(280 100% 60% / 0.4)"
+          strokeWidth={1}
+          animate={{ opacity: [0.6, 1, 0.6] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+        <text x="80" y="12" textAnchor="middle" className="fill-foreground text-[8px]">
+          🔍 Catches errors before submit
+        </text>
       </g>
 
       {/* Connections */}
@@ -217,7 +249,7 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
           key={conn.from + conn.to}
           path={conn.path}
           isActive={i <= currentStep}
-          isError={i === 1 && hasError && currentStep >= 2}
+          isError={i === 3 && hasError && currentStep >= 4}
           label={conn.label}
           labelPosition={conn.label ? labelPositions[`${conn.from}-${conn.to}`] : undefined}
         />
@@ -233,7 +265,7 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
           description={step.description}
           status={getStatus(i)}
           puppet={step.puppet}
-          size={42}
+          size={38}
           showDescription={true}
           aiEnabled={step.aiEnabled}
           aiCapability={step.aiCapability}
@@ -241,32 +273,36 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
       ))}
 
       {/* Legend */}
-      <g transform="translate(30, 420)">
-        <text x="0" y="0" className="fill-foreground text-[10px] font-semibold">Legend:</text>
+      <g transform="translate(30, 415)">
+        <text x="0" y="0" className="fill-foreground text-[9px] font-semibold">Legend:</text>
         
         {/* AI indicator */}
         <motion.circle
-          cx="55"
+          cx="50"
           cy="-3"
-          r="6"
+          r="5"
           fill="hsl(280 100% 60%)"
           animate={{ scale: [1, 1.15, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         />
-        <text x="64" y="0" className="fill-foreground text-[9px] font-semibold">AI</text>
-        <text x="78" y="0" className="fill-muted-foreground text-[9px]">AI-enabled</text>
+        <text x="58" y="0" className="fill-foreground text-[8px] font-semibold">AI</text>
         
-        <circle cx="150" cy="-3" r="6" className="fill-primary" />
-        <text x="162" y="0" className="fill-muted-foreground text-[9px]">Client</text>
+        <circle cx="95" cy="-3" r="5" className="fill-primary" />
+        <text x="104" y="0" className="fill-muted-foreground text-[8px]">Client/Agent</text>
         
-        <circle cx="205" cy="-3" r="6" className="fill-secondary" />
-        <text x="217" y="0" className="fill-muted-foreground text-[9px]">System</text>
+        <circle cx="170" cy="-3" r="5" className="fill-secondary" />
+        <text x="179" y="0" className="fill-muted-foreground text-[8px]">System</text>
         
-        <circle cx="270" cy="-3" r="6" className="fill-accent" />
-        <text x="282" y="0" className="fill-muted-foreground text-[9px]">Underwriter</text>
+        <rect x="225" y="-7" width="8" height="8" rx="1" className="fill-card stroke-border" />
+        <text x="237" y="0" className="fill-muted-foreground text-[8px]">Document</text>
         
-        <rect x="345" y="-8" width="10" height="10" rx="2" className="fill-card stroke-border" />
-        <text x="360" y="0" className="fill-muted-foreground text-[9px]">Document</text>
+        {/* Validation example */}
+        <g transform="translate(300, 0)">
+          <rect x="0" y="-10" width="280" height="18" rx="4" fill="hsl(280 100% 60% / 0.08)" />
+          <text x="140" y="2" textAnchor="middle" className="fill-muted-foreground text-[8px]">
+            Auto-Detect Example: "Miami, TX" → ⚠️ "Miami is in FL, not TX"
+          </text>
+        </g>
       </g>
 
       {/* AI Capability detail for current step */}
@@ -277,18 +313,18 @@ export function DetailedView({ currentStep, hasError }: DetailedViewProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <rect x="30" y="445" width="890" height="35" rx="8" className="fill-card stroke-border" />
-          <text x="475" y="467" textAnchor="middle" className="fill-foreground text-[11px] font-medium">
-            Step {currentStep + 1}/12: {aiStepDetails[Math.min(currentStep, 11)]}
+          <rect x="30" y="445" width="820" height="32" rx="6" className="fill-card stroke-border" />
+          <text x="440" y="465" textAnchor="middle" className="fill-foreground text-[10px] font-medium">
+            Step {currentStep + 1}/13: {aiStepDetails[Math.min(currentStep, 12)]}
           </text>
         </motion.g>
       </AnimatePresence>
 
       {/* Current step indicator */}
-      <g transform="translate(700, 495)">
-        <rect x="0" y="0" width="220" height="20" rx="4" className="fill-muted/50" />
-        <text x="110" y="14" textAnchor="middle" className="fill-muted-foreground text-[9px]">
-          {detailedSteps[Math.min(currentStep, 11)]?.aiEnabled ? "🤖 AI-Assisted Step" : "Manual/System Step"}
+      <g transform="translate(640, 490)">
+        <rect x="0" y="0" width="200" height="18" rx="4" className="fill-muted/50" />
+        <text x="100" y="12" textAnchor="middle" className="fill-muted-foreground text-[8px]">
+          {detailedSteps[Math.min(currentStep, 12)]?.aiEnabled ? "🤖 AI-Assisted Step" : "👤 Manual/System Step"}
         </text>
       </g>
     </svg>
