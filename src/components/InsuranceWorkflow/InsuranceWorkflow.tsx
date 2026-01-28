@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Pause, RotateCcw, Users, Cog, FormInput, Upload, FileSearch } from "lucide-react";
+import { Play, Pause, RotateCcw, Users, Cog, FormInput, Upload, FileSearch, LayoutDashboard } from "lucide-react";
 import { ExecutiveView } from "./ExecutiveView";
 import { DetailedView } from "./DetailedView";
 import { ApplicationForm } from "./ApplicationForm";
 import { DocumentUpload } from "./DocumentUpload";
 import { DocumentReview } from "./DocumentReview";
+import { HandoffDashboard } from "./HandoffDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function InsuranceWorkflow() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
-  const [activeTab, setActiveTab] = useState("executive");
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   const totalSteps = 13;
 
@@ -92,7 +93,11 @@ export function InsuranceWorkflow() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full max-w-3xl grid-cols-5 mb-4">
+            <TabsList className="grid w-full max-w-4xl grid-cols-6 mb-4">
+              <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs">
+                <LayoutDashboard size={14} />
+                <span className="hidden sm:inline">Dashboard</span>
+              </TabsTrigger>
               <TabsTrigger value="executive" className="flex items-center gap-1 text-xs">
                 <Users size={14} />
                 <span className="hidden sm:inline">Executive</span>
@@ -116,6 +121,10 @@ export function InsuranceWorkflow() {
             </TabsList>
 
             <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-4 min-h-[500px]">
+              <TabsContent value="dashboard" className="mt-0">
+                <HandoffDashboard />
+              </TabsContent>
+
               <TabsContent value="executive" className="mt-0 h-full">
                 <ExecutiveView currentStep={currentStep} />
               </TabsContent>
