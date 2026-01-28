@@ -197,6 +197,12 @@ function DataSourceCard({ source }: { source: DataSource }) {
             <span>{source.receivedPoints || 0}/{source.dataPoints}</span>
           </div>
           <Progress value={progress} className="h-1.5" />
+          {(source.receivedPoints || 0) > 0 && (
+            <div className="flex items-center gap-1 mt-1.5 text-[10px] text-primary">
+              <Send size={8} className="animate-pulse" />
+              <span>Status synced to tracking dashboard</span>
+            </div>
+          )}
         </div>
       )}
       
@@ -276,6 +282,33 @@ export function HandoffDashboard() {
   
   return (
     <div className="space-y-6">
+      {/* Dashboard Status Banner */}
+      <Card className="border-primary/30 bg-primary/5">
+        <CardContent className="py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-full bg-primary/10">
+                <RefreshCw size={16} className="text-primary animate-spin" style={{ animationDuration: '3s' }} />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Real-Time Tracking Dashboard</p>
+                <p className="text-xs text-muted-foreground">
+                  Each data point receipt automatically syncs status to this dashboard
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Live</span>
+              </div>
+              <span>•</span>
+              <span>Last sync: Just now</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Summary Header */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
