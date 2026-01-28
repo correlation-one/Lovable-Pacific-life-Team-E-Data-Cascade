@@ -1,7 +1,7 @@
-import { DataFlowVisualization } from "@/components/DataFlowVisualization";
+import { InsuranceWorkflow } from "@/components/InsuranceWorkflow";
 
 const Index = () => {
-  return <DataFlowVisualization />;
+  return <InsuranceWorkflow />;
 };
 
 export default Index;
