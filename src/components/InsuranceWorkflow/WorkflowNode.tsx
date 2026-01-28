@@ -8,9 +8,11 @@ interface WorkflowNodeProps {
   label: string;
   description: string;
   status: StepStatus;
-  puppet?: "client" | "system" | "underwriter" | "document";
+  puppet?: "client" | "system" | "underwriter" | "document" | "ai";
   size?: number;
   showDescription?: boolean;
+  aiEnabled?: boolean;
+  aiCapability?: string;
 }
 
 const statusColors = {
@@ -30,6 +32,8 @@ export function WorkflowNode({
   puppet,
   size = 60,
   showDescription = true,
+  aiEnabled = false,
+  aiCapability,
 }: WorkflowNodeProps) {
   const isActive = status === "active";
   const isError = status === "error";
@@ -130,6 +134,45 @@ export function WorkflowNode({
         >
           <title>Error</title>
         </motion.circle>
+      )}
+
+      {/* AI indicator badge */}
+      {aiEnabled && (
+        <motion.g
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          {/* AI badge glow */}
+          <motion.circle
+            cx={x - size * 0.7}
+            cy={y - size * 0.7}
+            r={14}
+            fill="hsl(280 100% 60% / 0.3)"
+            animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          {/* AI badge */}
+          <circle
+            cx={x - size * 0.7}
+            cy={y - size * 0.7}
+            r={12}
+            fill="hsl(280 100% 60%)"
+          />
+          <text
+            x={x - size * 0.7}
+            y={y - size * 0.7 + 4}
+            textAnchor="middle"
+            className="text-[8px] font-bold"
+            fill="white"
+          >
+            AI
+          </text>
+          {/* Tooltip for AI capability */}
+          {aiCapability && (
+            <title>{aiCapability}</title>
+          )}
+        </motion.g>
       )}
     </motion.g>
   );
