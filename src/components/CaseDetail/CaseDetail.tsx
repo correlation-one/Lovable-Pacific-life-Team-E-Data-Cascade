@@ -130,7 +130,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
                 </TabsTrigger>
                 <TabsTrigger value="gaps" className="text-xs gap-1">
                   <AlertCircle className="w-3 h-3" />
-                  Gaps
+                  Unresolved
                 </TabsTrigger>
                 <TabsTrigger value="audit" className="text-xs gap-1">
                   <History className="w-3 h-3" />

@@ -99,9 +99,9 @@ export function OverviewTab({ caseData, gaps, evidenceOrders }: OverviewTabProps
         />
         <MetricCard
           icon={<AlertTriangle className="w-4 h-4" />}
-          label="Open Gaps"
+          label="Unresolved"
           value={openGaps.length.toString()}
-          subtext={`${closedGaps.length} closed`}
+          subtext={`${closedGaps.length} resolved`}
           alert={openGaps.length > 0}
         />
         <MetricCard
