@@ -79,9 +79,10 @@ export function ActionableItems({
   // Build unified action items from all sources
   const actionItems: ActionItem[] = [];
 
-  // From gaps
+  // From gaps - only MVR-related for focused prototype
   gaps
-    .filter((g) => g.caseId === caseId && g.status !== "closed")
+    .filter((g) => g.caseId === caseId && g.status !== "closed" && 
+      (g.description.toLowerCase().includes("mvr") || g.relatedFields.some(f => f.toLowerCase().includes("driving") || f.toLowerCase().includes("license"))))
     .forEach((gap) => {
       actionItems.push({
         id: gap.id,
@@ -98,9 +99,9 @@ export function ActionableItems({
       });
     });
 
-  // From failed evidence
+  // From failed evidence - only MVR for focused prototype
   evidenceOrders
-    .filter((e) => e.caseId === caseId && e.status === "failed")
+    .filter((e) => e.caseId === caseId && e.status === "failed" && e.type === "MVR")
     .forEach((evidence) => {
       actionItems.push({
         id: evidence.id,
@@ -114,45 +115,7 @@ export function ActionableItems({
       });
     });
 
-  // From document conflicts
-  documents
-    .filter((d) => d.caseId === caseId && d.conflicts.length > 0)
-    .forEach((doc) => {
-      doc.conflicts.forEach((conflict) => {
-        actionItems.push({
-          id: `${doc.id}-${conflict.field}`,
-          type: "conflict",
-          priority: "high",
-          title: `Conflicting ${conflict.field}`,
-          description: `Multiple values found: ${conflict.values.map((v) => v.value).join(" vs ")}`,
-          field: conflict.field,
-          fieldValue: conflict.values[0]?.value,
-          source: doc.name,
-          action: "resolve-conflict",
-          actionLabel: "Resolve",
-          status: "outstanding",
-        });
-      });
-    });
-
-  // From field verifications needing clarification
-  fieldVerifications
-    .filter((f) => f.caseId === caseId && f.verificationStatus === "needs-clarification")
-    .forEach((field) => {
-      actionItems.push({
-        id: field.id,
-        type: "verification",
-        priority: "medium",
-        title: `Verify ${field.fieldName}`,
-        description: `Current value: ${field.currentValue} (${field.confidence}% confidence)`,
-        field: field.fieldName,
-        fieldValue: field.currentValue,
-        source: field.source,
-        action: "verify-field",
-        actionLabel: "Verify",
-        status: "outstanding",
-      });
-    });
+  // Document conflicts and field verifications removed for MVR-focused prototype
 
   // Sort by priority
   actionItems.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
