@@ -472,16 +472,18 @@ export const mockGaps: Gap[] = [
     ],
     severity: "high",
     priority: "high",
-    status: "requested",
+    status: "closed",
     ownerTeam: "case-manager",
     requestedFrom: "Applicant",
     dueDate: "2024-02-16T17:00:00Z",
     createdDate: "2024-02-06T11:00:00Z",
+    closedDate: "2024-02-08T14:30:00Z",
     relatedFields: ["DOB"],
     relatedEvidenceOrders: [],
     timeline: [
       { status: "open", timestamp: "2024-02-06T11:00:00Z", actor: "System" },
-      { status: "requested", timestamp: "2024-02-06T14:00:00Z", actor: "Lisa Park" }
+      { status: "requested", timestamp: "2024-02-06T14:00:00Z", actor: "Lisa Park" },
+      { status: "closed", timestamp: "2024-02-08T14:30:00Z", actor: "Lisa Park" }
     ]
   },
   {
