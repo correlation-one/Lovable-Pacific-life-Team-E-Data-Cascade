@@ -52,7 +52,16 @@ interface CaseContextType {
   resetDemo: () => void;
 }
 
-const CaseContext = createContext<CaseContextType | null>(null);
+// Keep the Context instance stable across Fast Refresh/HMR to avoid
+// consumers and providers referencing different Context objects.
+const CASE_CONTEXT_KEY = "__whalewatcher_case_context__";
+const CaseContext: React.Context<CaseContextType | null> = (() => {
+  const g = globalThis as unknown as Record<string, unknown>;
+  if (!g[CASE_CONTEXT_KEY]) {
+    g[CASE_CONTEXT_KEY] = createContext<CaseContextType | null>(null);
+  }
+  return g[CASE_CONTEXT_KEY] as React.Context<CaseContextType | null>;
+})();
 
 export function CaseProvider({ children }: { children: React.ReactNode }) {
   const [cases, setCases] = useState<Case[]>(mockCases);
