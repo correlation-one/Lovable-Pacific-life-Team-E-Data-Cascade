@@ -109,7 +109,7 @@ export function CaseHeader({
           {openGapsCount > 0 && (
             <Badge variant="outline" className="gap-1 border-amber-500 text-amber-600 text-[10px] h-5">
               <AlertCircle className="w-3 h-3" />
-              {openGapsCount} Gaps
+              {openGapsCount} Unresolved
             </Badge>
           )}
 

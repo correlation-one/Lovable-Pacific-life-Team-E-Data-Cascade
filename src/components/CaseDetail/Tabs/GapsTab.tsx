@@ -90,7 +90,7 @@ export function GapsTab({
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-muted-foreground">Total Gaps</p>
+                <p className="text-xs text-muted-foreground">Total Items</p>
                 <p className="text-2xl font-bold">{caseGaps.length}</p>
               </div>
               <Package className="w-8 h-8 text-muted-foreground" />
@@ -141,14 +141,14 @@ export function GapsTab({
       {closedGaps.length > 0 && (
         <Card className="border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
+          <CardTitle className="text-sm flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
               <CheckCircle className="w-4 h-4" />
-              Confirmation of gap closure
+              Confirmation of item resolution
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground mb-2">
-              The following gaps have been resolved and closed:
+              The following items have been resolved and closed:
             </p>
             <div className="space-y-1">
               {closedGaps.map((gap) => (
@@ -171,7 +171,7 @@ export function GapsTab({
       <Card>
         <CardHeader>
           <CardTitle className="text-sm">
-            Gaps identified, sequenced, and packaged by type, priority, severity
+            Items identified, sequenced, and packaged by type, priority, severity
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -183,7 +183,7 @@ export function GapsTab({
                     {type.replace("-", " ")}
                   </Badge>
                   <span className="text-xs text-muted-foreground">
-                    {typeGaps.length} gap{typeGaps.length !== 1 ? "s" : ""}
+                    {typeGaps.length} item{typeGaps.length !== 1 ? "s" : ""}
                   </span>
                 </div>
                 <div className="grid gap-2">
@@ -240,7 +240,7 @@ export function GapsTab({
                           <DialogHeader>
                             <DialogTitle className="flex items-center gap-2">
                               <Package className="w-5 h-5" />
-                              Gap Details
+                              Item Details
                             </DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
@@ -329,7 +329,7 @@ export function GapsTab({
                                       onClick={() => onCloseGap?.(gap.id)}
                                     >
                                       <CheckCircle className="w-3 h-3 mr-1" />
-                                      Close Gap
+                                      Resolve Item
                                     </Button>
                                   )}
                                 </>
@@ -351,7 +351,7 @@ export function GapsTab({
       {openGaps.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Open Gaps Requiring Action</CardTitle>
+            <CardTitle className="text-sm">Unresolved Items Requiring Action</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>

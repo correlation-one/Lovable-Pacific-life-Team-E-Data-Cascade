@@ -110,7 +110,7 @@ export function ComponentProgress({
     },
     {
       id: "gaps",
-      label: "Gap Resolution",
+      label: "Unresolved Items",
       progress: caseGaps.length > 0
         ? Math.round((caseGaps.filter((g) => g.status === "closed").length / caseGaps.length) * 100)
         : 100,
