@@ -485,6 +485,29 @@ export const mockGaps: Gap[] = [
     ]
   },
   {
+    id: "GAP-010",
+    caseId: "CASE-2024-003",
+    type: "evidence-failure",
+    description: "MVR order blocked - Driver's license details require verification",
+    questions: [
+      "Verify driver's license number is correct",
+      "Confirm license issuing state matches application",
+      "Provide clear copy of driver's license if needed"
+    ],
+    severity: "critical",
+    priority: "urgent",
+    status: "open",
+    ownerTeam: "evidence-team",
+    requestedFrom: "Agent",
+    dueDate: "2024-02-15T17:00:00Z",
+    createdDate: "2024-02-13T10:00:00Z",
+    relatedFields: ["License Number", "License State"],
+    relatedEvidenceOrders: ["EO-003"],
+    timeline: [
+      { status: "open", timestamp: "2024-02-13T10:00:00Z", actor: "System" }
+    ]
+  },
+  {
     id: "GAP-002",
     caseId: "CASE-2024-002",
     type: "missing-info",
