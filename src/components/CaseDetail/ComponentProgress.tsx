@@ -103,18 +103,18 @@ export function ComponentProgress({
   
   const components: ComponentData[] = [
     {
-      id: "application",
-      label: "Case Status",
+      id: "general",
+      label: "General",
       progress: Math.min(100, caseData.completenessScore),
       total: 100,
       completed: caseData.completenessScore,
       hasIssues: caseData.completenessScore < 70,
       issueCount: caseData.completenessScore < 70 ? 1 : 0,
-      color: "hsl(217, 91%, 60%)", // Blue
+      color: "hsl(199, 89%, 48%)", // Pacific Blue
     },
     {
-      id: "gaps",
-      label: "Unresolved Items",
+      id: "medical",
+      label: "Medical History",
       progress: caseGaps.length > 0
         ? Math.round((caseGaps.filter((g) => g.status === "closed").length / caseGaps.length) * 100)
         : 100,
@@ -125,8 +125,8 @@ export function ComponentProgress({
       color: "hsl(38, 92%, 50%)", // Amber
     },
     {
-      id: "review",
-      label: "Pending Review",
+      id: "financial",
+      label: "Financial History",
       progress: totalReviewItems > 0
         ? Math.round(((totalReviewItems - pendingReviewCount) / totalReviewItems) * 100)
         : 100,
@@ -136,13 +136,33 @@ export function ComponentProgress({
       issueCount: pendingReviewCount,
       color: "hsl(262, 83%, 58%)", // Purple
     },
+    {
+      id: "family",
+      label: "Family History",
+      progress: 85,
+      total: 10,
+      completed: 8,
+      hasIssues: true,
+      issueCount: 2,
+      color: "hsl(142, 71%, 45%)", // Green
+    },
+    {
+      id: "lifestyle",
+      label: "Lifestyle",
+      progress: 100,
+      total: 5,
+      completed: 5,
+      hasIssues: false,
+      issueCount: 0,
+      color: "hsl(340, 82%, 52%)", // Pink
+    },
   ];
 
   return (
     <div className="w-full bg-card border border-border rounded-lg shadow-sm p-4">
 
       {/* Component Grid */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-5 gap-3">
         {components.map((component) => (
           <Tooltip key={component.id}>
             <TooltipTrigger asChild>
