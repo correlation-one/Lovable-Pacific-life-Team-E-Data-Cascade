@@ -12,12 +12,14 @@ import { HealthHistoryQuestions } from "./HealthHistoryQuestions";
 import { OverviewTab } from "./Tabs/OverviewTab";
 import { DocumentsTab } from "./Tabs/DocumentsTab";
 import { EvidenceTab } from "./Tabs/EvidenceTab";
+import { GapsTab } from "./Tabs/GapsTab";
 import { AuditTrailTab } from "./Tabs/AuditTrailTab";
 import { mockEvidenceRules, mockFieldVerifications } from "@/data/mockData";
 import {
   LayoutDashboard,
   FileText,
   Target,
+  AlertCircle,
   History,
 } from "lucide-react";
 
@@ -84,6 +86,8 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
         setActiveTab("evidence");
         break;
       case "gaps":
+        setActiveTab("gaps");
+        break;
       case "application":
       case "verification":
         setActiveTab("overview");
@@ -125,7 +129,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
           {/* Main Workspace */}
           <div className="col-span-12 lg:col-span-8">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4 mb-3">
+              <TabsList className="grid w-full grid-cols-5 mb-3">
                 <TabsTrigger value="overview" className="text-xs gap-1">
                   <LayoutDashboard className="w-3 h-3" />
                   Overview
@@ -137,6 +141,10 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
                 <TabsTrigger value="evidence" className="text-xs gap-1">
                   <Target className="w-3 h-3" />
                   Evidence
+                </TabsTrigger>
+                <TabsTrigger value="gaps" className="text-xs gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  Gaps
                 </TabsTrigger>
                 <TabsTrigger value="audit" className="text-xs gap-1">
                   <History className="w-3 h-3" />
@@ -153,6 +161,9 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
                 </TabsContent>
                 <TabsContent value="evidence" className="mt-0">
                   <EvidenceTab evidenceOrders={evidenceOrders} evidenceRules={mockEvidenceRules} caseId={selectedCase.id} />
+                </TabsContent>
+                <TabsContent value="gaps" className="mt-0">
+                  <GapsTab gaps={gaps} caseId={selectedCase.id} onCloseGap={closeGap} />
                 </TabsContent>
                 <TabsContent value="audit" className="mt-0">
                   <AuditTrailTab events={auditEvents} caseId={selectedCase.id} />
