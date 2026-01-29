@@ -519,8 +519,8 @@ export const mockGaps: Gap[] = [
       "Provide details on prior hospitalizations",
       "Clarify medication history for past 5 years"
     ],
-    severity: "high",
-    priority: "high",
+    severity: "critical",
+    priority: "urgent",
     status: "open",
     ownerTeam: "underwriter",
     requestedFrom: "Applicant",
