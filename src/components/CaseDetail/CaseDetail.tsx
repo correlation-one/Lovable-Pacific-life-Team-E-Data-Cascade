@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCaseContext } from "@/context/CaseContext";
 import { CaseHeader } from "./CaseHeader";
-import { JourneyTracker } from "./JourneyTracker";
+import { ComponentProgress } from "./ComponentProgress";
 import { CaseSnapshot } from "./CaseSnapshot";
 import { ActionableItems } from "./ActionableItems";
 import { DemoControls } from "./DemoControls";
@@ -64,9 +64,24 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
   };
 
   const handleViewField = (fieldName: string, docId?: string) => {
-    // Switch to documents tab and highlight the field
     setActiveTab("documents");
-    // In a real app, would scroll to and highlight the specific field
+  };
+
+  const handleComponentClick = (component: string) => {
+    // Navigate to relevant tab based on component
+    switch (component) {
+      case "documents":
+        setActiveTab("documents");
+        break;
+      case "evidence":
+        setActiveTab("evidence");
+        break;
+      case "gaps":
+      case "application":
+      case "verification":
+        setActiveTab("overview");
+        break;
+    }
   };
 
   return (
@@ -79,16 +94,15 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
       />
 
       <div className="p-6 space-y-4">
-        {/* Compact Journey + Snapshot row */}
+        {/* Component Progress + Snapshot row */}
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 lg:col-span-9">
-            <JourneyTracker
-              currentStage={selectedCase.stage}
-              stageStatus={selectedCase.stageStatus}
-              stageOwners={selectedCase.stageOwners}
-              stageETAs={selectedCase.stageETAs}
-              stageBlockers={selectedCase.stageBlockers}
-              activeTab={activeTab}
+            <ComponentProgress
+              caseData={selectedCase}
+              gaps={gaps}
+              evidenceOrders={evidenceOrders}
+              documents={documents}
+              onComponentClick={handleComponentClick}
             />
           </div>
           <div className="col-span-12 lg:col-span-3">
@@ -101,7 +115,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
         </div>
 
         <div className="grid grid-cols-12 gap-4">
-          {/* Main Workspace - wider */}
+          {/* Main Workspace */}
           <div className="col-span-12 lg:col-span-8">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-4 mb-3">
@@ -142,7 +156,6 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
 
           {/* Right Side - Action Items + Demo Controls */}
           <div className="col-span-12 lg:col-span-4 space-y-4">
-            {/* Actionable Items - unified workbench */}
             <ActionableItems
               gaps={gaps}
               evidenceOrders={evidenceOrders}
@@ -153,7 +166,6 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               onViewField={handleViewField}
             />
 
-            {/* Demo Controls - collapsed by default in production */}
             <DemoControls
               caseId={selectedCase.id}
               onToggleMissingDemographics={(m) => toggleMissingDemographics(selectedCase.id, m)}
