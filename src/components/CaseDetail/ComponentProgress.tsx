@@ -154,7 +154,7 @@ export function ComponentProgress({
       completed: 5,
       hasIssues: false,
       issueCount: 0,
-      color: "hsl(340, 82%, 52%)", // Pink
+      color: "hsl(142, 71%, 45%)", // Green
     },
   ];
 
