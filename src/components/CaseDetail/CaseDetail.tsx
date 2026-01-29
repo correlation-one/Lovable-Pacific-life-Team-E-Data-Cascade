@@ -166,6 +166,11 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               caseId={selectedCase.id}
               onCloseGap={closeGap}
               onViewField={handleViewField}
+              onActionClick={(action) => {
+                if (action.type === "evidence" && action.title.includes("MVR")) {
+                  setShowAIDemo(true);
+                }
+              }}
             />
 
             <DemoControls
