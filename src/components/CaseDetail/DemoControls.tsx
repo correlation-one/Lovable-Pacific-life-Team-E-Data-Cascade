@@ -6,13 +6,13 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
   Play,
-  RotateCcw,
   AlertTriangle,
   CheckCircle,
   Send,
   FileText,
   ChevronRight,
   Zap,
+  Sparkles,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -26,6 +26,7 @@ interface DemoControlsProps {
   onCloseGap: () => void;
   onAdvanceStage: () => void;
   onSendNotification: (type: string) => void;
+  onShowAIReconciliation?: () => void;
 }
 
 export function DemoControls({
@@ -38,6 +39,7 @@ export function DemoControls({
   onCloseGap,
   onAdvanceStage,
   onSendNotification,
+  onShowAIReconciliation,
 }: DemoControlsProps) {
   const [missingDemo, setMissingDemo] = useState(false);
   const [evidenceFailed, setEvidenceFailed] = useState(false);
@@ -54,6 +56,19 @@ export function DemoControls({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Featured Demo Button */}
+        {onShowAIReconciliation && (
+          <Button
+            onClick={onShowAIReconciliation}
+            className="w-full bg-gradient-to-r from-purple-600 to-primary hover:from-purple-700 hover:to-primary/90"
+          >
+            <Sparkles className="w-4 h-4 mr-2" />
+            AI Document Reconciliation Demo
+          </Button>
+        )}
+
+        <Separator />
+
         {/* Toggle Controls */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">

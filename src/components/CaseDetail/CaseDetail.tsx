@@ -7,6 +7,7 @@ import { ComponentProgress } from "./ComponentProgress";
 import { CaseSnapshot } from "./CaseSnapshot";
 import { ActionableItems } from "./ActionableItems";
 import { DemoControls } from "./DemoControls";
+import { AIReconciliationDemo } from "./AIReconciliationDemo";
 import { OverviewTab } from "./Tabs/OverviewTab";
 import { DocumentsTab } from "./Tabs/DocumentsTab";
 import { EvidenceTab } from "./Tabs/EvidenceTab";
@@ -25,6 +26,7 @@ interface CaseDetailProps {
 
 export function CaseDetail({ onBack }: CaseDetailProps) {
   const [activeTab, setActiveTab] = useState("overview");
+  const [showAIDemo, setShowAIDemo] = useState(false);
   const {
     selectedCase,
     documents,
@@ -179,10 +181,22 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               }}
               onAdvanceStage={() => advanceStage(selectedCase.id)}
               onSendNotification={handleSendNotification}
+              onShowAIReconciliation={() => setShowAIDemo(true)}
             />
           </div>
         </div>
       </div>
+
+      {/* AI Reconciliation Demo Modal */}
+      <AIReconciliationDemo
+        isOpen={showAIDemo}
+        onClose={() => setShowAIDemo(false)}
+        onComplete={() => {
+          receiveEvidence(selectedCase.id, "MVR");
+          const openGap = gaps.find((g) => g.caseId === selectedCase.id && g.status !== "closed");
+          if (openGap) closeGap(openGap.id);
+        }}
+      />
     </div>
   );
 }
