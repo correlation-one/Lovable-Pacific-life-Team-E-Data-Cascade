@@ -100,7 +100,7 @@ export function ComponentProgress({
   const components: ComponentData[] = [
     {
       id: "application",
-      label: "Application",
+      label: "Case Status",
       progress: Math.min(100, caseData.completenessScore),
       total: 100,
       completed: caseData.completenessScore,
