@@ -45,7 +45,7 @@ function AppContent() {
     return <CaseDetail onBack={handleBack} />;
   }
 
-  // Use CASE-2024-003 (Robert K. Williams) - has DOB conflicts, blocked status, open gaps
+  // Use CASE-2024-003 (Susan Berry) - has DOB conflicts, blocked status, open gaps
   const unresolvedCase = cases.find(c => c.id === "CASE-2024-003") || cases[0];
   return <WorkQueue cases={[unresolvedCase]} onSelectCase={handleSelectCase} />;
 }

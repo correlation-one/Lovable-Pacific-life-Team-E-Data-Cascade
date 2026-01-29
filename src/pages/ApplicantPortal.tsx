@@ -16,7 +16,7 @@ const journeyStages = [
 
 // Mock applicant data
 const applicantData = {
-  name: "Robert K. Williams",
+  name: "Susan Berry",
   applicationId: "APP-2024-003",
   submittedDate: "January 15, 2024",
   currentStage: 3,
