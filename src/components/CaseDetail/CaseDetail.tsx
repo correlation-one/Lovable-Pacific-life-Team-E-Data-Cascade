@@ -154,7 +154,13 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
                   />
                 </TabsContent>
                 <TabsContent value="gaps" className="mt-0">
-                  <GapsTab gaps={gaps} caseId={selectedCase.id} onCloseGap={closeGap} />
+                  <GapsTab 
+                    gaps={gaps} 
+                    caseId={selectedCase.id} 
+                    onCloseGap={closeGap}
+                    onShowAIResolution={() => setShowAIDemo(true)}
+                    onShowHealthHistory={() => setShowHealthHistory(true)}
+                  />
                 </TabsContent>
                 <TabsContent value="audit" className="mt-0">
                   <AuditTrailTab events={auditEvents} caseId={selectedCase.id} />
