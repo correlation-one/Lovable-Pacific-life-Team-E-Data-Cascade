@@ -109,30 +109,6 @@ export function ComponentProgress({
       color: "hsl(217, 91%, 60%)", // Blue
     },
     {
-      id: "documents",
-      label: "Documents",
-      progress: caseDocs.length > 0 
-        ? Math.round((caseDocs.filter((d) => d.processingStatus === "processed").length / caseDocs.length) * 100)
-        : 0,
-      total: caseDocs.length,
-      completed: caseDocs.filter((d) => d.processingStatus === "processed").length,
-      hasIssues: caseDocs.some((d) => d.conflicts.length > 0),
-      issueCount: caseDocs.reduce((acc, d) => acc + d.conflicts.length, 0),
-      color: "hsl(262, 83%, 58%)", // Purple
-    },
-    {
-      id: "evidence",
-      label: "Evidence",
-      progress: caseEvidence.length > 0
-        ? Math.round((caseEvidence.filter((e) => e.status === "received").length / caseEvidence.length) * 100)
-        : 100,
-      total: caseEvidence.length,
-      completed: caseEvidence.filter((e) => e.status === "received").length,
-      hasIssues: caseEvidence.some((e) => e.status === "failed"),
-      issueCount: caseEvidence.filter((e) => e.status === "failed").length,
-      color: "hsl(142, 71%, 45%)", // Green
-    },
-    {
       id: "gaps",
       label: "Gap Resolution",
       progress: caseGaps.length > 0
@@ -179,7 +155,7 @@ export function ComponentProgress({
       </div>
 
       {/* Component Grid */}
-      <div className="grid grid-cols-5 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {components.map((component) => (
           <Tooltip key={component.id}>
             <TooltipTrigger asChild>
