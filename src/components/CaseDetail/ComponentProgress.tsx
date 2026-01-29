@@ -122,27 +122,8 @@ export function ComponentProgress({
     },
   ];
 
-  // Overall progress
-  const overallProgress = Math.round(
-    components.reduce((acc, c) => acc + c.progress, 0) / components.length
-  );
-  const totalIssues = components.reduce((acc, c) => acc + c.issueCount, 0);
-
   return (
     <div className="w-full bg-card border border-border rounded-lg shadow-sm p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-sm font-semibold text-foreground">Case Completeness</h3>
-          <p className="text-xs text-muted-foreground">
-            {totalIssues > 0 ? `${totalIssues} issue${totalIssues > 1 ? "s" : ""} to resolve` : "All components on track"}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold">{overallProgress}%</span>
-          <span className="text-xs text-muted-foreground">overall</span>
-        </div>
-      </div>
 
       {/* Component Grid */}
       <div className="grid grid-cols-2 gap-3">
