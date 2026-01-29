@@ -30,7 +30,48 @@ import {
 } from "lucide-react";
 import { Case, JOURNEY_STAGES, Priority, StageStatus } from "@/types/case";
 import { cn } from "@/lib/utils";
-import { formatDistanceToNow, parseISO, isPast } from "date-fns";
+
+function getAvailableActions(c: Case): string[] {
+  const actions: string[] = [];
+  
+  if (c.stageStatus === "blocked") {
+    actions.push("Resolve Blocker");
+  }
+  
+  switch (c.stage) {
+    case 1:
+      actions.push("Upload Documents");
+      break;
+    case 2:
+      actions.push("Review Extractions");
+      break;
+    case 3:
+      if (c.completenessScore < 100) actions.push("Verify Fields");
+      if (c.riskFlags.length > 0) actions.push("Review Risk Flags");
+      break;
+    case 4:
+      actions.push("Order Evidence");
+      break;
+    case 5:
+      actions.push("Review Pre-Fill");
+      break;
+    case 6:
+      actions.push("Close Gaps");
+      break;
+    case 7:
+      actions.push("Prepare Packet");
+      break;
+    case 8:
+      actions.push("Export to UW");
+      break;
+  }
+  
+  if (c.stageStatus === "completed" && c.stage < 8) {
+    actions.push("Advance Stage");
+  }
+  
+  return actions;
+}
 
 interface WorkQueueProps {
   cases: Case[];
@@ -151,7 +192,7 @@ export function WorkQueue({ cases, onSelectCase }: WorkQueueProps) {
               <div>
                 <p className="text-xs text-muted-foreground">SLA At Risk</p>
                 <p className="text-2xl font-bold text-amber-600">
-                  {cases.filter((c) => isPast(parseISO(c.slaDue))).length}
+                  {cases.filter((c) => new Date(c.slaDue) < new Date()).length}
                 </p>
               </div>
               <Clock className="w-8 h-8 text-amber-500" />
@@ -216,14 +257,14 @@ function CaseTable({
               <TableHead>Stage</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Priority</TableHead>
-              <TableHead>SLA</TableHead>
               <TableHead>Assigned</TableHead>
+              <TableHead>Actions Available</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {cases.map((c) => {
-              const slaAtRisk = isPast(parseISO(c.slaDue));
+              const availableActions = getAvailableActions(c);
               return (
                 <TableRow
                   key={c.id}
@@ -235,7 +276,7 @@ function CaseTable({
                   <TableCell className="text-sm">{c.productType}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className="text-xs">
-                      {c.stage}. {JOURNEY_STAGES[c.stage].split(" ").slice(0, 2).join(" ")}
+                      {JOURNEY_STAGES[c.stage]}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -248,12 +289,20 @@ function CaseTable({
                       {c.priority}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <span className={cn("text-xs", slaAtRisk && "text-destructive font-medium")}>
-                      {formatDistanceToNow(parseISO(c.slaDue), { addSuffix: true })}
-                    </span>
-                  </TableCell>
                   <TableCell className="text-sm">{c.assignedTo}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1 max-w-[200px]">
+                      {availableActions.map((action, idx) => (
+                        <Badge
+                          key={idx}
+                          variant="secondary"
+                          className="text-xs bg-primary/10 text-primary hover:bg-primary/20"
+                        >
+                          {action}
+                        </Badge>
+                      ))}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <ChevronRight className="w-4 h-4 text-muted-foreground" />
                   </TableCell>
