@@ -166,25 +166,6 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
           </ScrollArea>
         </Tabs>
 
-        {/* Demo Controls - Bottom */}
-        <DemoControls
-          caseId={selectedCase.id}
-          demoCompleted={demoCompleted}
-          onToggleMissingDemographics={(m) => toggleMissingDemographics(selectedCase.id, m)}
-          onVerifyDemographics={() => verifyDemographics(selectedCase.id)}
-          onOrderEvidence={() => orderEvidence(selectedCase.id, "MVR")}
-          onToggleEvidenceFailure={(f) => toggleEvidenceFailure(selectedCase.id, f)}
-          onReceiveEvidence={() => receiveEvidence(selectedCase.id, "MVR")}
-          onCloseGap={() => {
-            const openGap = gaps.find((g) => g.caseId === selectedCase.id && g.status !== "closed");
-            if (openGap) closeGap(openGap.id);
-          }}
-          onAdvanceStage={() => advanceStage(selectedCase.id)}
-          onSendNotification={handleSendNotification}
-          onShowAIReconciliation={() => setShowAIDemo(true)}
-          onShowHealthHistory={() => setShowHealthHistory(true)}
-          onResetDemo={resetDemo}
-        />
       </div>
 
       {/* AI Reconciliation Demo Modal */}
