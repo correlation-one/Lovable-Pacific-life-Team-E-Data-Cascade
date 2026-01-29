@@ -4,7 +4,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCaseContext } from "@/context/CaseContext";
 import { CaseHeader } from "./CaseHeader";
 import { ComponentProgress } from "./ComponentProgress";
-import { CaseSnapshot } from "./CaseSnapshot";
 import { DemoControls } from "./DemoControls";
 import { AIReconciliationDemo } from "./AIReconciliationDemo";
 import { HealthHistoryQuestions } from "./HealthHistoryQuestions";
@@ -55,7 +54,6 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
   const openGapsCount = gaps.filter(
     (g) => g.caseId === selectedCase.id && g.status !== "closed"
   ).length;
-  const blockers = selectedCase.blockers?.length || 0;
 
   const handleSendNotification = (type: string) => {
     addNotification({
@@ -104,25 +102,14 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
       />
 
       <div className="p-6 space-y-4">
-        {/* Component Progress + Snapshot row */}
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 lg:col-span-9">
-            <ComponentProgress
-              caseData={selectedCase}
-              gaps={gaps}
-              evidenceOrders={evidenceOrders}
-              documents={documents}
-              onComponentClick={handleComponentClick}
-            />
-          </div>
-          <div className="col-span-12 lg:col-span-3">
-            <CaseSnapshot
-              caseData={selectedCase}
-              openGapsCount={openGapsCount}
-              blockersCount={blockers}
-            />
-          </div>
-        </div>
+        {/* Component Progress */}
+        <ComponentProgress
+          caseData={selectedCase}
+          gaps={gaps}
+          evidenceOrders={evidenceOrders}
+          documents={documents}
+          onComponentClick={handleComponentClick}
+        />
 
         <div className="grid grid-cols-12 gap-4">
           {/* Main Workspace */}
