@@ -34,6 +34,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
     evidenceOrders,
     notifications,
     auditEvents,
+    demoCompleted,
     toggleMissingDemographics,
     verifyDemographics,
     orderEvidence,
@@ -42,6 +43,8 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
     closeGap,
     advanceStage,
     addNotification,
+    completeDemoSuccess,
+    resetDemo,
   } = useCaseContext();
 
   if (!selectedCase) return null;
@@ -175,6 +178,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
 
             <DemoControls
               caseId={selectedCase.id}
+              demoCompleted={demoCompleted}
               onToggleMissingDemographics={(m) => toggleMissingDemographics(selectedCase.id, m)}
               onVerifyDemographics={() => verifyDemographics(selectedCase.id)}
               onOrderEvidence={() => orderEvidence(selectedCase.id, "MVR")}
@@ -187,6 +191,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               onAdvanceStage={() => advanceStage(selectedCase.id)}
               onSendNotification={handleSendNotification}
               onShowAIReconciliation={() => setShowAIDemo(true)}
+              onResetDemo={resetDemo}
             />
           </div>
         </div>
@@ -197,9 +202,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
         isOpen={showAIDemo}
         onClose={() => setShowAIDemo(false)}
         onComplete={() => {
-          receiveEvidence(selectedCase.id, "MVR");
-          const openGap = gaps.find((g) => g.caseId === selectedCase.id && g.status !== "closed");
-          if (openGap) closeGap(openGap.id);
+          completeDemoSuccess(selectedCase.id);
         }}
       />
     </div>

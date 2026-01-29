@@ -28,6 +28,7 @@ interface CaseContextType {
   evidenceOrders: EvidenceOrder[];
   notifications: Notification[];
   auditEvents: AuditEvent[];
+  demoCompleted: boolean;
   
   // Actions
   selectCase: (caseId: string | null) => void;
@@ -47,6 +48,8 @@ interface CaseContextType {
   toggleEvidenceFailure: (caseId: string, failed: boolean) => void;
   receiveEvidence: (caseId: string, evidenceType: EvidenceOrder["type"]) => void;
   advanceStage: (caseId: string) => void;
+  completeDemoSuccess: (caseId: string) => void;
+  resetDemo: () => void;
 }
 
 const CaseContext = createContext<CaseContextType | null>(null);
@@ -54,10 +57,11 @@ const CaseContext = createContext<CaseContextType | null>(null);
 export function CaseProvider({ children }: { children: React.ReactNode }) {
   const [cases, setCases] = useState<Case[]>(mockCases);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
-  const [documents] = useState<Document[]>(mockDocuments);
+  const [documents, setDocuments] = useState<Document[]>(mockDocuments);
   const [gaps, setGaps] = useState<Gap[]>(mockGaps);
   const [evidenceOrders, setEvidenceOrders] = useState<EvidenceOrder[]>(mockEvidenceOrders);
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const [demoCompleted, setDemoCompleted] = useState(false);
   const [auditEvents, setAuditEvents] = useState<AuditEvent[]>(mockAuditEvents);
 
   const selectedCase = cases.find((c) => c.id === selectedCaseId) || null;
@@ -427,6 +431,72 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
     [cases, updateCaseStage]
   );
 
+  const completeDemoSuccess = useCallback(
+    (caseId: string) => {
+      // Mark all evidence as received
+      setEvidenceOrders((prev) =>
+        prev.map((e) =>
+          e.caseId === caseId
+            ? { ...e, status: "received", receivedDate: new Date().toISOString(), failureReason: undefined }
+            : e
+        )
+      );
+      // Close all gaps
+      setGaps((prev) =>
+        prev.map((g) =>
+          g.caseId === caseId
+            ? { ...g, status: "closed" as const, closedDate: new Date().toISOString() }
+            : g
+        )
+      );
+      // Mark documents as processed with no conflicts
+      setDocuments((prev) =>
+        prev.map((d) =>
+          d.caseId === caseId
+            ? { ...d, processingStatus: "processed" as const, conflicts: [] }
+            : d
+        )
+      );
+      // Update case to completed state
+      setCases((prev) =>
+        prev.map((c) =>
+          c.id === caseId
+            ? {
+                ...c,
+                stage: 8 as JourneyStage,
+                stageStatus: "completed",
+                completenessScore: 100,
+                blockers: [],
+                riskFlags: [],
+              }
+            : c
+        )
+      );
+      setDemoCompleted(true);
+      addAuditEvent({
+        caseId,
+        eventType: "stage-change",
+        timestamp: new Date().toISOString(),
+        actor: "System",
+        actorType: "system",
+        details: "MVR successfully retrieved - Case ready for decision",
+        relatedEntityType: "Case",
+        relatedEntityId: caseId,
+      });
+    },
+    [addAuditEvent]
+  );
+
+  const resetDemo = useCallback(() => {
+    setCases(mockCases);
+    setDocuments(mockDocuments);
+    setGaps(mockGaps);
+    setEvidenceOrders(mockEvidenceOrders);
+    setNotifications(mockNotifications);
+    setAuditEvents(mockAuditEvents);
+    setDemoCompleted(false);
+  }, []);
+
   return (
     <CaseContext.Provider
       value={{
@@ -438,6 +508,7 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
         evidenceOrders,
         notifications,
         auditEvents,
+        demoCompleted,
         selectCase,
         updateCaseStage,
         updateCaseStatus,
@@ -453,6 +524,8 @@ export function CaseProvider({ children }: { children: React.ReactNode }) {
         toggleEvidenceFailure,
         receiveEvidence,
         advanceStage,
+        completeDemoSuccess,
+        resetDemo,
       }}
     >
       {children}
