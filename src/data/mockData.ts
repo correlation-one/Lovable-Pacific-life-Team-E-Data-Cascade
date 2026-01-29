@@ -79,8 +79,8 @@ export const mockCases: Case[] = [
   {
     id: "CASE-2024-003",
     applicantName: "Susan Berry",
-    dob: "1990-11-08",
-    age: 33,
+    dob: "1983-11-08",
+    age: 42,
     state: "FL",
     productType: "Promise Life",
     coverageAmount: 500000,
@@ -330,7 +330,7 @@ export const mockDocuments: Document[] = [
     processingStatus: "processed",
     extractedFields: [
       { field: "Full Name", value: "Susan Berry", confidence: 98, sourceDocId: "DOC-001" },
-      { field: "DOB", value: "1990-11-08", confidence: 95, sourceDocId: "DOC-001" },
+      { field: "DOB", value: "1983-11-08", confidence: 95, sourceDocId: "DOC-001" },
       { field: "Address", value: "123 Palm Ave, Miami, FL 33101", confidence: 92, sourceDocId: "DOC-001" },
       { field: "License Number", value: "W123-456-78-901-0", confidence: 99, sourceDocId: "DOC-001" },
     ],
@@ -354,8 +354,8 @@ export const mockDocuments: Document[] = [
       {
         field: "DOB",
         values: [
-          { value: "1990-11-08", source: "Driver's License", docId: "DOC-001" },
-          { value: "1990-11-18", source: "Birth Certificate", docId: "DOC-002" }
+          { value: "1983-11-08", source: "Driver's License", docId: "DOC-001" },
+          { value: "1983-11-18", source: "Birth Certificate", docId: "DOC-002" }
         ]
       }
     ],
@@ -371,7 +371,7 @@ export const mockDocuments: Document[] = [
     processingStatus: "processed",
     extractedFields: [
       { field: "Full Name", value: "Robert K Williams", confidence: 99, sourceDocId: "DOC-003" },
-      { field: "DOB", value: "1990-11-08", confidence: 99, sourceDocId: "DOC-003" },
+      { field: "DOB", value: "1983-11-08", confidence: 99, sourceDocId: "DOC-003" },
       { field: "SSN", value: "***-**-1234", confidence: 99, sourceDocId: "DOC-003" },
       { field: "Email", value: "rwilliams@email.com", confidence: 99, sourceDocId: "DOC-003" },
       { field: "Phone", value: "(305) 555-1234", confidence: 99, sourceDocId: "DOC-003" },
@@ -389,8 +389,8 @@ export const mockDocuments: Document[] = [
     receivedDate: "2024-02-08T14:00:00Z",
     processingStatus: "processed",
     extractedFields: [
-      { field: "Patient Name", value: "Robert Williams", confidence: 85, sourceDocId: "DOC-004" },
-      { field: "DOB", value: "11/08/1990", confidence: 45, sourceDocId: "DOC-004" },
+      { field: "Patient Name", value: "Susan Berry", confidence: 85, sourceDocId: "DOC-004" },
+      { field: "DOB", value: "11/08/1983", confidence: 45, sourceDocId: "DOC-004" },
       { field: "Blood Pressure", value: "128/82", confidence: 78, sourceDocId: "DOC-004" },
       { field: "Height", value: "5'10\"", confidence: 92, sourceDocId: "DOC-004" },
       { field: "Weight", value: "175 lbs", confidence: 90, sourceDocId: "DOC-004" },
@@ -433,7 +433,7 @@ export const mockFieldVerifications: FieldVerification[] = [
     id: "FV-002",
     caseId: "CASE-2024-003",
     fieldName: "DOB",
-    currentValue: "1990-11-08",
+    currentValue: "1983-11-08",
     source: "Multiple Sources (Conflict)",
     confidence: 45,
     verificationStatus: "needs-clarification",
@@ -828,7 +828,7 @@ export const mockAuditEvents: AuditEvent[] = [
     timestamp: "2024-02-05T11:45:00Z",
     actor: "System",
     actorType: "system",
-    details: "DOB conflict detected between Driver's License (1990-11-08) and Birth Certificate (1990-11-18)",
+    details: "DOB conflict detected between Driver's License (1983-11-08) and Birth Certificate (1983-11-18)",
     relatedEntityType: "FieldVerification",
     relatedEntityId: "FV-002"
   },
@@ -947,12 +947,12 @@ export const mockApplicationSections: ApplicationSection[] = [
         changeLog: []
       },
       {
-        id: "AF-002", name: "dob", label: "Date of Birth", value: "1990-11-08",
+        id: "AF-002", name: "dob", label: "Date of Birth", value: "1983-11-08",
         source: "document", confidence: 45, verificationStatus: "needs-clarification",
         conflictIndicator: true, lastUpdated: "2024-02-05T11:45:00Z", updatedBy: "System",
         changeLog: [
-          { timestamp: "2024-02-05T11:30:00Z", previousValue: "", newValue: "1990-11-08", source: "Driver's License", reason: "Initial extraction" },
-          { timestamp: "2024-02-05T11:35:00Z", previousValue: "1990-11-08", newValue: "1990-11-18", source: "Birth Certificate", reason: "Conflicting value detected" }
+          { timestamp: "2024-02-05T11:30:00Z", previousValue: "", newValue: "1983-11-08", source: "Driver's License", reason: "Initial extraction" },
+          { timestamp: "2024-02-05T11:35:00Z", previousValue: "1983-11-08", newValue: "1983-11-18", source: "Birth Certificate", reason: "Conflicting value detected" }
         ]
       },
       {
