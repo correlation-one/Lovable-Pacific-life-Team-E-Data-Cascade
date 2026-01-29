@@ -8,7 +8,7 @@ import { CaseSnapshot } from "./CaseSnapshot";
 import { ActionableItems } from "./ActionableItems";
 import { DemoControls } from "./DemoControls";
 import { AIReconciliationDemo } from "./AIReconciliationDemo";
-import { HealthHistoryViewer } from "./HealthHistoryViewer";
+import { HealthHistoryQuestions } from "./HealthHistoryQuestions";
 import { OverviewTab } from "./Tabs/OverviewTab";
 import { DocumentsTab } from "./Tabs/DocumentsTab";
 import { EvidenceTab } from "./Tabs/EvidenceTab";
@@ -210,8 +210,8 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
         }}
       />
 
-      {/* Health History Document Viewer */}
-      <HealthHistoryViewer
+      {/* Health History Questions */}
+      <HealthHistoryQuestions
         isOpen={showHealthHistory}
         onClose={() => setShowHealthHistory(false)}
       />
