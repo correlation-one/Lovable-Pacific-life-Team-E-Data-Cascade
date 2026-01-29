@@ -26,7 +26,8 @@ type AgentCaseStatus = "submitted" | "in-review" | "action-needed" | "approved" 
 
 function getAgentStatus(c: Case): AgentCaseStatus {
   if (c.stage === 8 && c.stageStatus === "completed") return "approved";
-  if (c.stageStatus === "blocked") return "action-needed";
+  // Only Robert K. Williams (CASE-2024-003) shows action-needed for demo focus
+  if (c.id === "CASE-2024-003" && c.stageStatus === "blocked") return "action-needed";
   if (c.stage >= 7) return "in-review";
   return "in-review";
 }
