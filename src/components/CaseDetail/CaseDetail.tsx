@@ -111,86 +111,80 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
           onComponentClick={handleComponentClick}
         />
 
-        <div className="grid grid-cols-12 gap-4">
-          {/* Main Workspace */}
-          <div className="col-span-12 lg:col-span-8">
-            <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-5 mb-3">
-                <TabsTrigger value="overview" className="text-xs gap-1">
-                  <LayoutDashboard className="w-3 h-3" />
-                  Overview
-                </TabsTrigger>
-                <TabsTrigger value="documents" className="text-xs gap-1">
-                  <FileText className="w-3 h-3" />
-                  Documents
-                </TabsTrigger>
-                <TabsTrigger value="evidence" className="text-xs gap-1">
-                  <Target className="w-3 h-3" />
-                  Evidence
-                </TabsTrigger>
-                <TabsTrigger value="gaps" className="text-xs gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  Unresolved
-                </TabsTrigger>
-                <TabsTrigger value="audit" className="text-xs gap-1">
-                  <History className="w-3 h-3" />
-                  Audit Trail
-                </TabsTrigger>
-              </TabsList>
+        {/* Main Workspace - Full Width */}
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-5 mb-3">
+            <TabsTrigger value="overview" className="text-xs gap-1">
+              <LayoutDashboard className="w-3 h-3" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="documents" className="text-xs gap-1">
+              <FileText className="w-3 h-3" />
+              Documents
+            </TabsTrigger>
+            <TabsTrigger value="evidence" className="text-xs gap-1">
+              <Target className="w-3 h-3" />
+              Evidence
+            </TabsTrigger>
+            <TabsTrigger value="gaps" className="text-xs gap-1">
+              <AlertCircle className="w-3 h-3" />
+              Unresolved
+            </TabsTrigger>
+            <TabsTrigger value="audit" className="text-xs gap-1">
+              <History className="w-3 h-3" />
+              Audit Trail
+            </TabsTrigger>
+          </TabsList>
 
-              <ScrollArea className="h-[calc(100vh-380px)]">
-                <TabsContent value="overview" className="mt-0">
-                  <OverviewTab caseData={selectedCase} gaps={gaps} evidenceOrders={evidenceOrders} />
-                </TabsContent>
-                <TabsContent value="documents" className="mt-0">
-                  <DocumentsTab documents={documents} fieldVerifications={mockFieldVerifications} caseId={selectedCase.id} />
-                </TabsContent>
-                <TabsContent value="evidence" className="mt-0">
-                  <EvidenceTab 
-                    evidenceOrders={evidenceOrders} 
-                    evidenceRules={mockEvidenceRules} 
-                    caseId={selectedCase.id}
-                    onShowResolution={() => setShowAIDemo(true)}
-                  />
-                </TabsContent>
-                <TabsContent value="gaps" className="mt-0">
-                  <GapsTab 
-                    gaps={gaps} 
-                    caseId={selectedCase.id} 
-                    onCloseGap={closeGap}
-                    onShowAIResolution={() => setShowAIDemo(true)}
-                    onShowHealthHistory={() => setShowHealthHistory(true)}
-                  />
-                </TabsContent>
-                <TabsContent value="audit" className="mt-0">
-                  <AuditTrailTab events={auditEvents} caseId={selectedCase.id} />
-                </TabsContent>
-              </ScrollArea>
-            </Tabs>
-          </div>
+          <ScrollArea className="h-[calc(100vh-420px)]">
+            <TabsContent value="overview" className="mt-0">
+              <OverviewTab caseData={selectedCase} gaps={gaps} evidenceOrders={evidenceOrders} />
+            </TabsContent>
+            <TabsContent value="documents" className="mt-0">
+              <DocumentsTab documents={documents} fieldVerifications={mockFieldVerifications} caseId={selectedCase.id} />
+            </TabsContent>
+            <TabsContent value="evidence" className="mt-0">
+              <EvidenceTab 
+                evidenceOrders={evidenceOrders} 
+                evidenceRules={mockEvidenceRules} 
+                caseId={selectedCase.id}
+                onShowResolution={() => setShowAIDemo(true)}
+              />
+            </TabsContent>
+            <TabsContent value="gaps" className="mt-0">
+              <GapsTab 
+                gaps={gaps} 
+                caseId={selectedCase.id} 
+                onCloseGap={closeGap}
+                onShowAIResolution={() => setShowAIDemo(true)}
+                onShowHealthHistory={() => setShowHealthHistory(true)}
+              />
+            </TabsContent>
+            <TabsContent value="audit" className="mt-0">
+              <AuditTrailTab events={auditEvents} caseId={selectedCase.id} />
+            </TabsContent>
+          </ScrollArea>
+        </Tabs>
 
-          {/* Right Side - Demo Controls */}
-          <div className="col-span-12 lg:col-span-4 space-y-4">
-            <DemoControls
-              caseId={selectedCase.id}
-              demoCompleted={demoCompleted}
-              onToggleMissingDemographics={(m) => toggleMissingDemographics(selectedCase.id, m)}
-              onVerifyDemographics={() => verifyDemographics(selectedCase.id)}
-              onOrderEvidence={() => orderEvidence(selectedCase.id, "MVR")}
-              onToggleEvidenceFailure={(f) => toggleEvidenceFailure(selectedCase.id, f)}
-              onReceiveEvidence={() => receiveEvidence(selectedCase.id, "MVR")}
-              onCloseGap={() => {
-                const openGap = gaps.find((g) => g.caseId === selectedCase.id && g.status !== "closed");
-                if (openGap) closeGap(openGap.id);
-              }}
-              onAdvanceStage={() => advanceStage(selectedCase.id)}
-              onSendNotification={handleSendNotification}
-              onShowAIReconciliation={() => setShowAIDemo(true)}
-              onShowHealthHistory={() => setShowHealthHistory(true)}
-              onResetDemo={resetDemo}
-            />
-          </div>
-        </div>
+        {/* Demo Controls - Bottom */}
+        <DemoControls
+          caseId={selectedCase.id}
+          demoCompleted={demoCompleted}
+          onToggleMissingDemographics={(m) => toggleMissingDemographics(selectedCase.id, m)}
+          onVerifyDemographics={() => verifyDemographics(selectedCase.id)}
+          onOrderEvidence={() => orderEvidence(selectedCase.id, "MVR")}
+          onToggleEvidenceFailure={(f) => toggleEvidenceFailure(selectedCase.id, f)}
+          onReceiveEvidence={() => receiveEvidence(selectedCase.id, "MVR")}
+          onCloseGap={() => {
+            const openGap = gaps.find((g) => g.caseId === selectedCase.id && g.status !== "closed");
+            if (openGap) closeGap(openGap.id);
+          }}
+          onAdvanceStage={() => advanceStage(selectedCase.id)}
+          onSendNotification={handleSendNotification}
+          onShowAIReconciliation={() => setShowAIDemo(true)}
+          onShowHealthHistory={() => setShowHealthHistory(true)}
+          onResetDemo={resetDemo}
+        />
       </div>
 
       {/* AI Reconciliation Demo Modal */}
