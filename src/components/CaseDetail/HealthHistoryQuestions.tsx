@@ -47,48 +47,18 @@ const healthQuestions: HealthQuestion[] = [
   },
   {
     id: "HQ-003",
-    question: "Have you ever been diagnosed with or treated for cancer, tumor, or any malignancy?",
-    category: "Oncology",
-    status: "unanswered"
-  },
-  {
-    id: "HQ-004",
-    question: "In the past 5 years, have you consulted a physician for any illness or injury requiring treatment for more than 7 days?",
-    category: "General Health",
-    status: "unanswered"
-  },
-  {
-    id: "HQ-005",
     question: "Are you currently taking any prescription medications?",
     category: "Medications",
     status: "unanswered"
   },
   {
-    id: "HQ-006",
-    question: "Have you ever been advised to have surgery that has not yet been performed?",
-    category: "Surgical History",
-    status: "unanswered"
-  },
-  {
-    id: "HQ-007",
-    question: "Have you ever been treated for or diagnosed with any mental health condition including anxiety or depression?",
-    category: "Mental Health",
-    status: "unanswered"
-  },
-  {
-    id: "HQ-008",
+    id: "HQ-004",
     question: "Have you used tobacco or nicotine products in the past 12 months?",
     category: "Lifestyle",
     status: "unanswered"
   },
   {
-    id: "HQ-009",
-    question: "What is your current height and weight?",
-    category: "Biometrics",
-    status: "unanswered"
-  },
-  {
-    id: "HQ-010",
+    id: "HQ-005",
     question: "Do you have any family history of heart disease, stroke, diabetes, or cancer before age 60?",
     category: "Family History",
     status: "unanswered"
