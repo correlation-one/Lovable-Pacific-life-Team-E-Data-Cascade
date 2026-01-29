@@ -182,23 +182,9 @@ export function WorkQueue({ cases, onSelectCase }: WorkQueueProps) {
               <div>
                 <p className="text-xs text-muted-foreground">Blocked</p>
                 <p className="text-2xl font-bold text-destructive">
-                  {cases.filter((c) => c.stageStatus === "blocked").length}
                 </p>
               </div>
               <AlertTriangle className="w-8 h-8 text-destructive" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border-amber-500/30">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-muted-foreground">SLA At Risk</p>
-                <p className="text-2xl font-bold text-amber-600">
-                  {cases.filter((c) => new Date(c.slaDue) < new Date()).length}
-                </p>
-              </div>
-              <Clock className="w-8 h-8 text-amber-500" />
             </div>
           </CardContent>
         </Card>

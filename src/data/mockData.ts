@@ -244,7 +244,7 @@ export const mockCases: Case[] = [
     assignedTeam: "evidence-team",
     submissionChannel: "broker",
     completenessScore: 78,
-    riskFlags: ["Evidence order failed", "SLA at risk"],
+    riskFlags: ["Evidence order failed"],
     blockers: ["MVR order failed - invalid license number"],
     stageOwners: {
       1: "System", 2: "System", 3: "Evidence Team", 4: "Evidence Team",
