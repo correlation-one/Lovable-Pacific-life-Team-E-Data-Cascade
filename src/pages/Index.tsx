@@ -2,16 +2,16 @@ import { useState } from "react";
 import { CaseProvider, useCaseContext } from "@/context/CaseContext";
 import { WorkQueue } from "@/components/WorkQueue/WorkQueue";
 import { CaseDetail } from "@/components/CaseDetail/CaseDetail";
-import { WhaleIcon } from "@/components/WhaleIcon";
+import pacificLifeLogo from "@/assets/pacific-life-logo.svg";
 
 function AppHeader() {
   return (
-    <header className="bg-primary text-primary-foreground py-4 px-6 shadow-lg">
-      <div className="flex items-center gap-3">
-        <WhaleIcon className="w-10 h-10" />
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Whale Watcher</h1>
-          <p className="text-xs text-primary-foreground/70">
+    <header className="bg-[#003366] text-white py-4 px-6 shadow-lg">
+      <div className="flex items-center gap-4">
+        <img src={pacificLifeLogo} alt="Pacific Life" className="h-10" />
+        <div className="border-l border-white/30 pl-4">
+          <h1 className="text-xl font-bold tracking-tight">Whale Watcher</h1>
+          <p className="text-xs text-white/70">
             Dynamic Policy Application Journey
           </p>
         </div>
