@@ -53,71 +53,46 @@ export function CaseHeader({
     : `${formatDistanceToNow(slaDue)} remaining`;
 
   return (
-    <div className="bg-card border-b border-border px-6 py-4 sticky top-0 z-20 shadow-sm">
-      <div className="flex items-center gap-4 mb-3">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onBack}
-          className="gap-1 text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back
-        </Button>
-      </div>
-
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        {/* Left: Case ID and Applicant */}
-        <div className="flex items-center gap-6">
+    <div className="bg-card border-b border-border px-4 py-2 sticky top-0 z-20 shadow-sm">
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+        {/* Left: Back + Case ID + Applicant */}
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onBack}
+            className="gap-1 text-muted-foreground hover:text-foreground h-7 px-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <div className="h-6 w-px bg-border" />
           <div>
-            <p className="text-xs text-muted-foreground">Case ID</p>
-            <p className="text-lg font-bold text-foreground">{caseData.id}</p>
+            <p className="text-[10px] text-muted-foreground leading-tight">Case ID</p>
+            <p className="text-sm font-bold text-foreground">{caseData.id}</p>
           </div>
-          <div className="h-10 w-px bg-border" />
+          <div className="h-6 w-px bg-border" />
           <div>
-            <p className="text-xs text-muted-foreground">Applicant</p>
-            <p className="text-lg font-semibold text-foreground">
-              {caseData.applicantName}
-            </p>
+            <p className="text-[10px] text-muted-foreground leading-tight">Applicant</p>
+            <p className="text-sm font-semibold text-foreground">{caseData.applicantName}</p>
           </div>
-          <div className="h-10 w-px bg-border" />
-          <div>
-            <p className="text-xs text-muted-foreground">Product / Coverage</p>
-            <p className="text-sm font-medium text-foreground">
+          <div className="h-6 w-px bg-border hidden sm:block" />
+          <div className="hidden sm:block">
+            <p className="text-[10px] text-muted-foreground leading-tight">Product</p>
+            <p className="text-xs font-medium text-foreground">
               {caseData.productType} • ${caseData.coverageAmount.toLocaleString()}
             </p>
           </div>
         </div>
 
-        {/* Center: Owner & Team */}
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-muted-foreground" />
-            <div>
-              <p className="text-xs text-muted-foreground">Assigned To</p>
-              <p className="text-sm font-medium">{caseData.assignedTo}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            <div>
-              <p className="text-xs text-muted-foreground">Team</p>
-              <p className="text-sm font-medium">
-                {roleLabels[caseData.assignedTeam]}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Priority, SLA, Status chips */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <Badge className={cn("capitalize", priorityColors[caseData.priority])}>
+        {/* Right: Status chips */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <Badge className={cn("capitalize text-[10px] h-5", priorityColors[caseData.priority])}>
             {caseData.priority}
           </Badge>
 
           <div
             className={cn(
-              "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium",
+              "flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium",
               slaAtRisk
                 ? "bg-destructive/10 text-destructive"
                 : "bg-muted text-muted-foreground"
@@ -127,36 +102,25 @@ export function CaseHeader({
             {slaText}
           </div>
 
-          <Badge className={cn("capitalize", statusColors[caseData.stageStatus])}>
+          <Badge className={cn("capitalize text-[10px] h-5", statusColors[caseData.stageStatus])}>
             {caseData.stageStatus.replace("-", " ")}
           </Badge>
 
           {openGapsCount > 0 && (
-            <Badge
-              variant="outline"
-              className="gap-1 border-amber-500 text-amber-600"
-            >
+            <Badge variant="outline" className="gap-1 border-amber-500 text-amber-600 text-[10px] h-5">
               <AlertCircle className="w-3 h-3" />
-              {openGapsCount} Open Gaps
+              {openGapsCount} Gaps
             </Badge>
           )}
 
           {evidenceIssuesCount > 0 && (
-            <Badge
-              variant="outline"
-              className="gap-1 border-destructive text-destructive"
-            >
+            <Badge variant="outline" className="gap-1 border-destructive text-destructive text-[10px] h-5">
               <FileWarning className="w-3 h-3" />
-              {evidenceIssuesCount} Evidence Issues
+              {evidenceIssuesCount} Issues
             </Badge>
           )}
         </div>
       </div>
-
-      {/* Last Updated */}
-      <p className="text-xs text-muted-foreground mt-3">
-        Last updated: {format(parseISO(caseData.updatedDate), "MMM d, yyyy h:mm a")}
-      </p>
     </div>
   );
 }
