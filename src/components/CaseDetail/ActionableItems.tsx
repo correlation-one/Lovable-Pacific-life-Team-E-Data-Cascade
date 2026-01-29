@@ -79,10 +79,12 @@ export function ActionableItems({
   // Build unified action items from all sources
   const actionItems: ActionItem[] = [];
 
-  // From gaps - only MVR-related for focused prototype
+  // From gaps - MVR and Health History for focused prototype
   gaps
     .filter((g) => g.caseId === caseId && g.status !== "closed" && 
-      (g.description.toLowerCase().includes("mvr") || g.relatedFields.some(f => f.toLowerCase().includes("driving") || f.toLowerCase().includes("license"))))
+      (g.description.toLowerCase().includes("mvr") || 
+       g.description.toLowerCase().includes("health history") ||
+       g.relatedFields.some(f => f.toLowerCase().includes("driving") || f.toLowerCase().includes("license") || f.toLowerCase().includes("health"))))
     .forEach((gap) => {
       actionItems.push({
         id: gap.id,

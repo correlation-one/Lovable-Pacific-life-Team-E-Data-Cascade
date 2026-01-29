@@ -508,6 +508,29 @@ export const mockGaps: Gap[] = [
     ]
   },
   {
+    id: "GAP-011",
+    caseId: "CASE-2024-003",
+    type: "missing-info",
+    description: "Health History - Incomplete medical questionnaire",
+    questions: [
+      "Complete Part B of medical history questionnaire",
+      "Provide details on prior hospitalizations",
+      "Clarify medication history for past 5 years"
+    ],
+    severity: "high",
+    priority: "high",
+    status: "open",
+    ownerTeam: "underwriter",
+    requestedFrom: "Applicant",
+    dueDate: "2024-02-18T17:00:00Z",
+    createdDate: "2024-02-12T14:00:00Z",
+    relatedFields: ["Health History", "Medical Questionnaire"],
+    relatedEvidenceOrders: [],
+    timeline: [
+      { status: "open", timestamp: "2024-02-12T14:00:00Z", actor: "System" }
+    ]
+  },
+  {
     id: "GAP-002",
     caseId: "CASE-2024-002",
     type: "missing-info",
