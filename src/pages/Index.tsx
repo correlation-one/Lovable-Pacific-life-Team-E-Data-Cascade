@@ -18,7 +18,9 @@ function AppContent() {
     return <CaseDetail onBack={handleBack} />;
   }
 
-  return <WorkQueue cases={cases.slice(0, 1)} onSelectCase={handleSelectCase} />;
+  // Use CASE-2024-003 (Robert K. Williams) - has DOB conflicts, blocked status, open gaps
+  const unresolvedCase = cases.find(c => c.id === "CASE-2024-003") || cases[0];
+  return <WorkQueue cases={[unresolvedCase]} onSelectCase={handleSelectCase} />;
 }
 
 export default function Index() {
