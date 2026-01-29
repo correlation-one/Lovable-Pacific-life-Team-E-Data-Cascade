@@ -29,6 +29,7 @@ interface DemoControlsProps {
   onAdvanceStage: () => void;
   onSendNotification: (type: string) => void;
   onShowAIReconciliation?: () => void;
+  onShowHealthHistory?: () => void;
   onResetDemo?: () => void;
 }
 
@@ -44,6 +45,7 @@ export function DemoControls({
   onAdvanceStage,
   onSendNotification,
   onShowAIReconciliation,
+  onShowHealthHistory,
   onResetDemo,
 }: DemoControlsProps) {
   const [missingDemo, setMissingDemo] = useState(false);
@@ -88,16 +90,27 @@ export function DemoControls({
 
         {!demoCompleted && (
           <>
-            {/* Featured Demo Button */}
-            {onShowAIReconciliation && (
-              <Button
-                onClick={onShowAIReconciliation}
-                className="w-full bg-gradient-to-r from-purple-600 to-primary hover:from-purple-700 hover:to-primary/90"
-              >
-                <Sparkles className="w-4 h-4 mr-2" />
-                AI Document Reconciliation Demo
-              </Button>
-            )}
+            {/* Featured Demo Buttons */}
+            <div className="space-y-2">
+              {onShowAIReconciliation && (
+                <Button
+                  onClick={onShowAIReconciliation}
+                  className="w-full bg-gradient-to-r from-purple-600 to-primary hover:from-purple-700 hover:to-primary/90"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  MVR Reconciliation Demo
+                </Button>
+              )}
+              {onShowHealthHistory && (
+                <Button
+                  onClick={onShowHealthHistory}
+                  className="w-full bg-gradient-to-r from-rose-600 to-red-500 hover:from-rose-700 hover:to-red-600"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Health History Resolution Demo
+                </Button>
+              )}
+            </div>
 
             <Separator />
 
