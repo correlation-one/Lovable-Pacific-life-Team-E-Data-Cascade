@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { WhaleIcon } from "@/components/WhaleIcon";
+import humpbackWhale from "@/assets/humpback-whale.jpg";
 
 interface JourneyTrackerProps {
   currentStage: JourneyStage;
@@ -92,60 +93,90 @@ export function JourneyTracker({
   const whalePosition = getWhalePosition(currentStage);
 
   return (
-    <div className="w-full bg-card border border-border rounded-xl p-4 shadow-sm">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-          <WhaleIcon className="w-5 h-5 text-[#003366]" />
-          Whale Watcher Journey
-        </h3>
-        <div className="flex items-center gap-2 text-xs">
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            Surfaced
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-primary" />
-            Swimming
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-destructive" />
-            Beached
-          </span>
-        </div>
-      </div>
-
-      {/* Swimming Whale Indicator */}
-      <div className="relative h-8 mb-2">
-        <div className="absolute inset-x-0 top-1/2 h-1 bg-gradient-to-r from-blue-200 via-blue-300 to-blue-200 rounded-full opacity-30" />
-        <motion.div
-          className="absolute top-1/2 -translate-y-1/2"
-          initial={{ left: `${whalePosition}%` }}
-          animate={{ 
-            left: `${whalePosition}%`,
-            y: [0, -4, 0, -2, 0]
-          }}
-          transition={{ 
-            left: { duration: 0.5, ease: "easeInOut" },
-            y: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-          }}
-        >
-          <div className="relative -translate-x-1/2">
-            <WhaleIcon className={cn(
-              "w-8 h-8 transition-colors",
-              stageStatus === "blocked" ? "text-destructive" : "text-[#003366]"
-            )} />
-            {stageStatus === "blocked" && (
-              <motion.div
-                className="absolute -top-1 -right-1"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                <AlertTriangle className="w-4 h-4 text-destructive fill-destructive/20" />
-              </motion.div>
-            )}
+    <div className="w-full bg-card border border-border rounded-xl shadow-sm overflow-hidden">
+      {/* Ocean background strip */}
+      <div 
+        className="h-2 w-full"
+        style={{
+          backgroundImage: `url(${humpbackWhale})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+            <img 
+              src={humpbackWhale} 
+              alt="Whale" 
+              className="w-6 h-6 rounded-full object-cover border-2 border-[#003366]"
+            />
+            Whale Watcher Journey
+          </h3>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              Surfaced
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              Swimming
+            </span>
+            <span className="flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-destructive" />
+              Beached
+            </span>
           </div>
-        </motion.div>
-      </div>
+        </div>
+
+        {/* Swimming Whale Indicator */}
+        <div className="relative h-12 mb-2 rounded-lg overflow-hidden">
+          {/* Ocean background */}
+          <div 
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: `url(${humpbackWhale})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center 60%',
+            }}
+          />
+          <div className="absolute inset-x-0 top-1/2 h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400 rounded-full opacity-50" />
+          <motion.div
+            className="absolute top-1/2 -translate-y-1/2"
+            initial={{ left: `${whalePosition}%` }}
+            animate={{ 
+              left: `${whalePosition}%`,
+              y: [0, -6, 0, -3, 0]
+            }}
+            transition={{ 
+              left: { duration: 0.5, ease: "easeInOut" },
+              y: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+            }}
+          >
+            <div className="relative -translate-x-1/2">
+              <img 
+                src={humpbackWhale} 
+                alt="Whale progress" 
+                className={cn(
+                  "w-10 h-10 rounded-full object-cover border-2 shadow-lg transition-all",
+                  stageStatus === "blocked" 
+                    ? "border-destructive grayscale" 
+                    : "border-[#003366]"
+                )}
+              />
+              {stageStatus === "blocked" && (
+                <motion.div
+                  className="absolute -top-1 -right-1"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <AlertTriangle className="w-4 h-4 text-destructive fill-destructive/20" />
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </div>
 
       <div className="flex items-start justify-between overflow-x-auto pb-2">
         {stages.map(([stageNum, stageName], index) => {
@@ -220,6 +251,7 @@ export function JourneyTracker({
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );
