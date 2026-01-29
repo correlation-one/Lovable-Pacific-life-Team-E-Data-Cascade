@@ -26,23 +26,27 @@ interface ComponentData {
   color: string;
 }
 
+// Get color based on progress percentage
+function getProgressColor(progress: number): string {
+  if (progress >= 100) return "hsl(142, 71%, 45%)"; // Green
+  if (progress >= 70) return "hsl(38, 92%, 50%)"; // Orange/Amber
+  return "hsl(0, 84%, 60%)"; // Red
+}
+
 // Circular progress component
 function CircularProgress({
   progress,
   size = 64,
   strokeWidth = 6,
-  color,
-  hasIssues,
 }: {
   progress: number;
   size?: number;
   strokeWidth?: number;
-  color: string;
-  hasIssues: boolean;
 }) {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const offset = circumference - (progress / 100) * circumference;
+  const strokeColor = getProgressColor(progress);
 
   return (
     <div className="relative" style={{ width: size, height: size }}>
@@ -63,7 +67,7 @@ function CircularProgress({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke={hasIssues ? "hsl(var(--destructive))" : color}
+          stroke={strokeColor}
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -75,8 +79,8 @@ function CircularProgress({
       <div className="absolute inset-0 flex items-center justify-center">
         {progress === 100 ? (
           <CheckCircle className="w-5 h-5 text-emerald-500" />
-        ) : hasIssues ? (
-          <AlertTriangle className="w-4 h-4 text-destructive" />
+        ) : progress < 70 ? (
+          <AlertTriangle className="w-4 h-4 text-red-500" />
         ) : (
           <span className="text-sm font-bold">{progress}%</span>
         )}
@@ -176,8 +180,6 @@ export function ComponentProgress({
               >
                 <CircularProgress
                   progress={component.progress}
-                  color={component.color}
-                  hasIssues={component.hasIssues}
                 />
                 <span className="text-xs font-medium mt-2 text-center leading-tight">
                   {component.label}
