@@ -8,6 +8,7 @@ import { CaseSnapshot } from "./CaseSnapshot";
 import { ActionableItems } from "./ActionableItems";
 import { DemoControls } from "./DemoControls";
 import { AIReconciliationDemo } from "./AIReconciliationDemo";
+import { HealthHistoryViewer } from "./HealthHistoryViewer";
 import { OverviewTab } from "./Tabs/OverviewTab";
 import { DocumentsTab } from "./Tabs/DocumentsTab";
 import { EvidenceTab } from "./Tabs/EvidenceTab";
@@ -27,6 +28,7 @@ interface CaseDetailProps {
 export function CaseDetail({ onBack }: CaseDetailProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showAIDemo, setShowAIDemo] = useState(false);
+  const [showHealthHistory, setShowHealthHistory] = useState(false);
   const {
     selectedCase,
     documents,
@@ -172,6 +174,8 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               onActionClick={(action) => {
                 if (action.type === "evidence" && action.title.includes("MVR")) {
                   setShowAIDemo(true);
+                } else if (action.title.toLowerCase().includes("health history")) {
+                  setShowHealthHistory(true);
                 }
               }}
             />
@@ -204,6 +208,12 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
         onComplete={() => {
           completeDemoSuccess(selectedCase.id);
         }}
+      />
+
+      {/* Health History Document Viewer */}
+      <HealthHistoryViewer
+        isOpen={showHealthHistory}
+        onClose={() => setShowHealthHistory(false)}
       />
     </div>
   );
