@@ -57,6 +57,7 @@ const priorityOrder: Record<Priority, number> = {
   low: 3,
 };
 
+// Priority colors for action item badges
 const priorityColors: Record<Priority, string> = {
   urgent: "bg-red-100 text-red-700 border-red-300",
   high: "bg-amber-100 text-amber-700 border-amber-300",
