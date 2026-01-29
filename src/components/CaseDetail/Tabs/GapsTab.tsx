@@ -38,6 +38,8 @@ interface GapsTabProps {
   onCloseGap?: (gapId: string) => void;
   onSendRequest?: (gapId: string) => void;
   onSendReminder?: (gapId: string) => void;
+  onShowAIResolution?: () => void;
+  onShowHealthHistory?: () => void;
 }
 
 const statusConfig: Record<GapStatus, { icon: React.ElementType; color: string; bg: string }> = {
@@ -69,6 +71,8 @@ export function GapsTab({
   onCloseGap,
   onSendRequest,
   onSendReminder,
+  onShowAIResolution,
+  onShowHealthHistory,
 }: GapsTabProps) {
   const [selectedGap, setSelectedGap] = useState<Gap | null>(null);
   const caseGaps = gaps.filter((g) => g.caseId === caseId);
@@ -189,6 +193,72 @@ export function GapsTab({
                 <div className="grid gap-2">
                   {typeGaps.map((gap) => {
                     const StatusIcon = statusConfig[gap.status].icon;
+                    
+                    // Determine if this gap should trigger a resolution popup
+                    const handleGapClick = () => {
+                      if (gap.type === "evidence-failure" && onShowAIResolution) {
+                        onShowAIResolution();
+                      } else if (gap.type === "missing-info" && gap.description.toLowerCase().includes("health") && onShowHealthHistory) {
+                        onShowHealthHistory();
+                      } else {
+                        setSelectedGap(gap);
+                      }
+                    };
+
+                    // For gaps with resolution popups, don't use Dialog
+                    const hasResolutionPopup = 
+                      (gap.type === "evidence-failure" && onShowAIResolution) ||
+                      (gap.type === "missing-info" && gap.description.toLowerCase().includes("health") && onShowHealthHistory);
+
+                    if (hasResolutionPopup) {
+                      return (
+                        <div
+                          key={gap.id}
+                          className={cn(
+                            "p-3 rounded-lg border cursor-pointer hover:bg-muted/50 transition-colors",
+                            priorityColors[gap.priority],
+                            gap.status === "closed" && "opacity-60"
+                          )}
+                          onClick={handleGapClick}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <div
+                                  className={cn(
+                                    "w-5 h-5 rounded-full flex items-center justify-center",
+                                    statusConfig[gap.status].bg
+                                  )}
+                                >
+                                  <StatusIcon
+                                    className={cn("w-3 h-3", statusConfig[gap.status].color)}
+                                  />
+                                </div>
+                                <span className="text-sm font-medium">
+                                  {gap.description}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span>Owner: {gap.ownerTeam}</span>
+                                <span>•</span>
+                                <span>
+                                  Due: {format(parseISO(gap.dueDate), "MMM d")}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Badge
+                                className={cn("text-[10px]", severityColors[gap.severity])}
+                              >
+                                {gap.severity}
+                              </Badge>
+                              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    }
+
                     return (
                       <Dialog key={gap.id}>
                         <DialogTrigger asChild>
