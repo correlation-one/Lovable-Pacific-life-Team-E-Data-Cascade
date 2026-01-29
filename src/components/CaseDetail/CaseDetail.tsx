@@ -214,6 +214,9 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
       <HealthHistoryQuestions
         isOpen={showHealthHistory}
         onClose={() => setShowHealthHistory(false)}
+        onComplete={() => {
+          completeDemoSuccess(selectedCase.id);
+        }}
       />
     </div>
   );
