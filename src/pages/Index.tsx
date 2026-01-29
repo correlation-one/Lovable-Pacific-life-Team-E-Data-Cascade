@@ -18,7 +18,7 @@ function AppContent() {
     return <CaseDetail onBack={handleBack} />;
   }
 
-  return <WorkQueue cases={cases} onSelectCase={handleSelectCase} />;
+  return <WorkQueue cases={cases.slice(0, 1)} onSelectCase={handleSelectCase} />;
 }
 
 export default function Index() {
