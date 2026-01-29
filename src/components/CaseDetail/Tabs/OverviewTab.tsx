@@ -158,29 +158,6 @@ export function OverviewTab({ caseData, gaps, evidenceOrders }: OverviewTabProps
           </div>
         </CardContent>
       </Card>
-
-      {/* Team Info - minimal */}
-      <Card>
-        <CardContent className="py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm">
-                {caseData.assignedTo.split(" ").map((n) => n[0]).join("")}
-              </div>
-              <div>
-                <p className="text-sm font-medium">{caseData.assignedTo}</p>
-                <p className="text-xs text-muted-foreground capitalize">
-                  {caseData.assignedTeam.replace("-", " ")}
-                </p>
-              </div>
-            </div>
-            <div className="text-right text-xs text-muted-foreground">
-              <p>Channel: {caseData.submissionChannel}</p>
-              <p>Created: {new Date(caseData.createdDate).toLocaleDateString()}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
