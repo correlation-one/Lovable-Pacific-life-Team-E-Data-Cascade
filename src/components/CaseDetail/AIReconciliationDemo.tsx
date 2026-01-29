@@ -207,7 +207,7 @@ function StepInitial() {
             <div className="bg-muted rounded-lg p-4 space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Name:</span>
-                <span className="font-medium">Robert K. Williams</span>
+                <span className="font-medium">Susan Berry</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">DOB:</span>
@@ -231,7 +231,7 @@ function StepInitial() {
               <Eye className="w-4 h-4" />
               <span className="text-sm font-medium">OCR Extraction Results</span>
             </div>
-            <ExtractedField field="Full Name" value="Robert K. Williams" confidence={98} />
+            <ExtractedField field="Full Name" value="Susan Berry" confidence={98} />
             <ExtractedField field="Date of Birth" value="11/08/1990" confidence={95} />
             <ExtractedField field="State" value="FL" confidence={99} />
             <ExtractedField field="License Number" value="W123-4??-78-901-0" confidence={42} hasIssue />
@@ -485,7 +485,7 @@ function StepSuccess() {
                 Motor Vehicle Report Received
               </h4>
               <p className="text-sm text-muted-foreground">
-                DMV record successfully retrieved for Robert K. Williams
+                DMV record successfully retrieved for Susan Berry
               </p>
             </div>
           </div>

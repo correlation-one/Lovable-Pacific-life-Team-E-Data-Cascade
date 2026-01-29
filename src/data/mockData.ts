@@ -78,7 +78,7 @@ export const mockCases: Case[] = [
   },
   {
     id: "CASE-2024-003",
-    applicantName: "Robert K. Williams",
+    applicantName: "Susan Berry",
     dob: "1990-11-08",
     age: 33,
     state: "FL",
@@ -329,7 +329,7 @@ export const mockDocuments: Document[] = [
     receivedDate: "2024-02-05T11:30:00Z",
     processingStatus: "processed",
     extractedFields: [
-      { field: "Full Name", value: "Robert K. Williams", confidence: 98, sourceDocId: "DOC-001" },
+      { field: "Full Name", value: "Susan Berry", confidence: 98, sourceDocId: "DOC-001" },
       { field: "DOB", value: "1990-11-08", confidence: 95, sourceDocId: "DOC-001" },
       { field: "Address", value: "123 Palm Ave, Miami, FL 33101", confidence: 92, sourceDocId: "DOC-001" },
       { field: "License Number", value: "W123-456-78-901-0", confidence: 99, sourceDocId: "DOC-001" },
@@ -422,7 +422,7 @@ export const mockFieldVerifications: FieldVerification[] = [
     id: "FV-001",
     caseId: "CASE-2024-003",
     fieldName: "Full Name",
-    currentValue: "Robert K. Williams",
+    currentValue: "Susan Berry",
     source: "Driver's License",
     confidence: 98,
     verificationStatus: "verified",
@@ -927,7 +927,7 @@ export const mockAuditEvents: AuditEvent[] = [
     timestamp: "2024-02-06T10:00:00Z",
     actor: "Lisa Park",
     actorType: "user",
-    details: "Full Name verified as 'Robert K. Williams' from Driver's License",
+    details: "Full Name verified as 'Susan Berry' from Driver's License",
     relatedEntityType: "FieldVerification",
     relatedEntityId: "FV-001"
   }
@@ -941,7 +941,7 @@ export const mockApplicationSections: ApplicationSection[] = [
     completionPercentage: 100,
     fields: [
       {
-        id: "AF-001", name: "fullName", label: "Full Name", value: "Robert K. Williams",
+        id: "AF-001", name: "fullName", label: "Full Name", value: "Susan Berry",
         source: "document", confidence: 98, verificationStatus: "verified",
         conflictIndicator: false, lastUpdated: "2024-02-06T10:00:00Z", updatedBy: "Lisa Park",
         changeLog: []
