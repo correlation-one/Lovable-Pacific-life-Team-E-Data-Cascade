@@ -211,7 +211,7 @@ function StepInitial() {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">DOB:</span>
-                <span className="font-medium">11/08/1990</span>
+                <span className="font-medium">11/08/1983</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">State:</span>
@@ -232,7 +232,7 @@ function StepInitial() {
               <span className="text-sm font-medium">OCR Extraction Results</span>
             </div>
             <ExtractedField field="Full Name" value="Susan Berry" confidence={98} />
-            <ExtractedField field="Date of Birth" value="11/08/1990" confidence={95} />
+            <ExtractedField field="Date of Birth" value="11/08/1983" confidence={95} />
             <ExtractedField field="State" value="FL" confidence={99} />
             <ExtractedField field="License Number" value="W123-4??-78-901-0" confidence={42} hasIssue />
           </CardContent>
