@@ -146,7 +146,12 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
                   <DocumentsTab documents={documents} fieldVerifications={mockFieldVerifications} caseId={selectedCase.id} />
                 </TabsContent>
                 <TabsContent value="evidence" className="mt-0">
-                  <EvidenceTab evidenceOrders={evidenceOrders} evidenceRules={mockEvidenceRules} caseId={selectedCase.id} />
+                  <EvidenceTab 
+                    evidenceOrders={evidenceOrders} 
+                    evidenceRules={mockEvidenceRules} 
+                    caseId={selectedCase.id}
+                    onShowResolution={() => setShowAIDemo(true)}
+                  />
                 </TabsContent>
                 <TabsContent value="gaps" className="mt-0">
                   <GapsTab gaps={gaps} caseId={selectedCase.id} onCloseGap={closeGap} />

@@ -31,6 +31,7 @@ interface EvidenceTabProps {
   onOrderEvidence?: (type: EvidenceType) => void;
   onRetryOrder?: (orderId: string) => void;
   onOverride?: (orderId: string) => void;
+  onShowResolution?: () => void;
 }
 
 const statusConfig = {
@@ -47,6 +48,7 @@ export function EvidenceTab({
   onOrderEvidence,
   onRetryOrder,
   onOverride,
+  onShowResolution,
 }: EvidenceTabProps) {
   const caseOrders = evidenceOrders.filter((e) => e.caseId === caseId);
   const failedOrders = caseOrders.filter((e) => e.status === "failed");
@@ -317,7 +319,8 @@ export function EvidenceTab({
             {failedOrders.map((order) => (
               <div
                 key={order.id}
-                className="flex items-center justify-between p-3 bg-destructive/5 rounded-lg border border-destructive/20"
+                className="flex items-center justify-between p-3 bg-destructive/5 rounded-lg border border-destructive/20 cursor-pointer hover:bg-destructive/10 transition-colors"
+                onClick={onShowResolution}
               >
                 <div>
                   <p className="text-sm font-medium">
@@ -327,7 +330,7 @@ export function EvidenceTab({
                     {order.failureReason}
                   </p>
                 </div>
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); onRetryOrder?.(order.id); }}>
                   <RotateCcw className="w-3 h-3 mr-1" />
                   Retry
                 </Button>
@@ -336,7 +339,8 @@ export function EvidenceTab({
             {blockedOrders.map((order) => (
               <div
                 key={order.id}
-                className="flex items-center justify-between p-3 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800"
+                className="flex items-center justify-between p-3 bg-amber-50 dark:bg-amber-950/20 rounded-lg border border-amber-200 dark:border-amber-800 cursor-pointer hover:bg-amber-100 dark:hover:bg-amber-950/30 transition-colors"
+                onClick={onShowResolution}
               >
                 <div>
                   <p className="text-sm font-medium">
@@ -350,7 +354,7 @@ export function EvidenceTab({
                       .join(", ")}
                   </p>
                 </div>
-                <Button size="sm" variant="outline">
+                <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); onOverride?.(order.id); }}>
                   <Settings className="w-3 h-3 mr-1" />
                   Override
                 </Button>
