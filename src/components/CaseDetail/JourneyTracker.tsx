@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { WhaleIcon } from "@/components/WhaleIcon";
 
 interface JourneyTrackerProps {
   currentStage: JourneyStage;
@@ -72,6 +73,12 @@ const getConnectorColor = (
   return "bg-border";
 };
 
+// Whale position calculation for swimming animation
+const getWhalePosition = (currentStage: JourneyStage) => {
+  // Position whale between 0 and 100% based on current stage (1-8)
+  return ((currentStage - 1) / 7) * 100;
+};
+
 export function JourneyTracker({
   currentStage,
   stageStatus,
@@ -82,27 +89,62 @@ export function JourneyTracker({
   activeTab,
 }: JourneyTrackerProps) {
   const stages = Object.entries(JOURNEY_STAGES) as [string, string][];
+  const whalePosition = getWhalePosition(currentStage);
 
   return (
     <div className="w-full bg-card border border-border rounded-xl p-4 shadow-sm">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-foreground">
-          Journey Tracker
+        <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+          <WhaleIcon className="w-5 h-5 text-[#003366]" />
+          Whale Watcher Journey
         </h3>
         <div className="flex items-center gap-2 text-xs">
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            Completed
+            Surfaced
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-primary" />
-            In Progress
+            Swimming
           </span>
           <span className="flex items-center gap-1">
             <span className="w-2 h-2 rounded-full bg-destructive" />
-            Blocked
+            Beached
           </span>
         </div>
+      </div>
+
+      {/* Swimming Whale Indicator */}
+      <div className="relative h-8 mb-2">
+        <div className="absolute inset-x-0 top-1/2 h-1 bg-gradient-to-r from-blue-200 via-blue-300 to-blue-200 rounded-full opacity-30" />
+        <motion.div
+          className="absolute top-1/2 -translate-y-1/2"
+          initial={{ left: `${whalePosition}%` }}
+          animate={{ 
+            left: `${whalePosition}%`,
+            y: [0, -4, 0, -2, 0]
+          }}
+          transition={{ 
+            left: { duration: 0.5, ease: "easeInOut" },
+            y: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+          }}
+        >
+          <div className="relative -translate-x-1/2">
+            <WhaleIcon className={cn(
+              "w-8 h-8 transition-colors",
+              stageStatus === "blocked" ? "text-destructive" : "text-[#003366]"
+            )} />
+            {stageStatus === "blocked" && (
+              <motion.div
+                className="absolute -top-1 -right-1"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1, repeat: Infinity }}
+              >
+                <AlertTriangle className="w-4 h-4 text-destructive fill-destructive/20" />
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
       </div>
 
       <div className="flex items-start justify-between overflow-x-auto pb-2">

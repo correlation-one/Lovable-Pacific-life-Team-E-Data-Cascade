@@ -31,43 +31,44 @@ import {
 import { Case, JOURNEY_STAGES, Priority, StageStatus } from "@/types/case";
 import { cn } from "@/lib/utils";
 
+// Whale-themed action labels
 function getAvailableActions(c: Case): string[] {
   const actions: string[] = [];
   
   if (c.stageStatus === "blocked") {
-    actions.push("Resolve Blocker");
+    actions.push("🏖️ Rescue Beached");
   }
   
   switch (c.stage) {
     case 1:
-      actions.push("Upload Documents");
+      actions.push("📄 Surface Documents");
       break;
     case 2:
-      actions.push("Review Extractions");
+      actions.push("🔍 Scan Waters");
       break;
     case 3:
-      if (c.completenessScore < 100) actions.push("Verify Fields");
-      if (c.riskFlags.length > 0) actions.push("Review Risk Flags");
+      if (c.completenessScore < 100) actions.push("✓ Verify Sighting");
+      if (c.riskFlags.length > 0) actions.push("⚠️ Check Currents");
       break;
     case 4:
-      actions.push("Order Evidence");
+      actions.push("🎯 Signal Pod");
       break;
     case 5:
-      actions.push("Review Pre-Fill");
+      actions.push("📋 Chart Course");
       break;
     case 6:
-      actions.push("Close Gaps");
+      actions.push("🔗 Close Nets");
       break;
     case 7:
-      actions.push("Prepare Packet");
+      actions.push("📦 Prep Voyage");
       break;
     case 8:
-      actions.push("Export to UW");
+      actions.push("🚀 Launch");
       break;
   }
   
   if (c.stageStatus === "completed" && c.stage < 8) {
-    actions.push("Advance Stage");
+    actions.push("➡️ Dive Deeper");
   }
   
   return actions;
@@ -112,9 +113,11 @@ export function WorkQueue({ cases, onSelectCase }: WorkQueueProps) {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Work Queue</h1>
+        <h1 className="text-2xl font-bold flex items-center gap-2">
+          🐋 Whale Watch Queue
+        </h1>
         <p className="text-muted-foreground text-sm">
-          Manage and process underwriting cases
+          Track and manage underwriting cases on their journey
         </p>
       </div>
 

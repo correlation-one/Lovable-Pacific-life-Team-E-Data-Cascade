@@ -9,10 +9,14 @@ import {
   StickyNote,
   ChevronRight,
   Clock,
+  Anchor,
+  Navigation,
+  Waves,
 } from "lucide-react";
 import { NextBestAction, Blocker, Priority, UserRole } from "@/types/case";
 import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
+import { WhaleIcon } from "@/components/WhaleIcon";
 
 interface RightRailProps {
   nextBestActions: NextBestAction[];
@@ -47,12 +51,13 @@ export function RightRail({
 }: RightRailProps) {
   return (
     <div className="space-y-4">
-      {/* Next Best Actions */}
-      <Card>
-        <CardHeader className="pb-2">
+      {/* Next Best Actions - Whale Actions */}
+      <Card className="border-[#003366]/20">
+        <CardHeader className="pb-2 bg-gradient-to-r from-[#003366]/5 to-transparent rounded-t-lg">
           <CardTitle className="text-sm flex items-center gap-2">
-            <Lightbulb className="w-4 h-4 text-amber-500" />
-            Next Best Actions
+            <Navigation className="w-4 h-4 text-[#003366]" />
+            Whale Actions
+            <WhaleIcon className="w-4 h-4 text-[#003366] ml-auto" />
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
@@ -86,12 +91,12 @@ export function RightRail({
         </CardContent>
       </Card>
 
-      {/* Blockers */}
-      <Card>
+      {/* Blockers - Beached Alerts */}
+      <Card className="border-destructive/20">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-destructive" />
-            Blockers
+            <Anchor className="w-4 h-4 text-destructive" />
+            Beached Blockers
             {blockers.length > 0 && (
               <Badge variant="destructive" className="text-[10px] ml-auto">
                 {blockers.length}
@@ -135,12 +140,12 @@ export function RightRail({
         </CardContent>
       </Card>
 
-      {/* Watchers/Stakeholders */}
+      {/* Watchers/Stakeholders - Pod Members */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-sm flex items-center gap-2">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            Watchers
+            <Waves className="w-4 h-4 text-[#003366]" />
+            Pod Members
           </CardTitle>
         </CardHeader>
         <CardContent>
