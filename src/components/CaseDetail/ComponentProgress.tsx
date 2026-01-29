@@ -120,16 +120,6 @@ export function ComponentProgress({
       issueCount: caseGaps.filter((g) => g.status !== "closed").length,
       color: "hsl(38, 92%, 50%)", // Amber
     },
-    {
-      id: "verification",
-      label: "Verification",
-      progress: caseData.riskFlags.length === 0 ? 100 : Math.max(0, 100 - (caseData.riskFlags.length * 20)),
-      total: caseData.riskFlags.length + 1,
-      completed: caseData.riskFlags.length === 0 ? 1 : 0,
-      hasIssues: caseData.riskFlags.length > 0,
-      issueCount: caseData.riskFlags.length,
-      color: "hsl(346, 77%, 50%)", // Rose
-    },
   ];
 
   // Overall progress
@@ -155,7 +145,7 @@ export function ComponentProgress({
       </div>
 
       {/* Component Grid */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3">
         {components.map((component) => (
           <Tooltip key={component.id}>
             <TooltipTrigger asChild>
