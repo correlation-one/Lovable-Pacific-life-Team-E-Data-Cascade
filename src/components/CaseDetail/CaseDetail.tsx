@@ -118,6 +118,10 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               <LayoutDashboard className="w-3 h-3" />
               Overview
             </TabsTrigger>
+            <TabsTrigger value="gaps" className="text-xs gap-1">
+              <AlertCircle className="w-3 h-3" />
+              Unresolved
+            </TabsTrigger>
             <TabsTrigger value="documents" className="text-xs gap-1">
               <FileText className="w-3 h-3" />
               Documents
@@ -125,10 +129,6 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
             <TabsTrigger value="evidence" className="text-xs gap-1">
               <Target className="w-3 h-3" />
               Evidence
-            </TabsTrigger>
-            <TabsTrigger value="gaps" className="text-xs gap-1">
-              <AlertCircle className="w-3 h-3" />
-              Unresolved
             </TabsTrigger>
             <TabsTrigger value="audit" className="text-xs gap-1">
               <History className="w-3 h-3" />
