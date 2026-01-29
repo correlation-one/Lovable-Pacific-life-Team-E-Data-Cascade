@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CaseProvider, useCaseContext } from "@/context/CaseContext";
 import { WorkQueue } from "@/components/WorkQueue/WorkQueue";
 import { CaseDetail } from "@/components/CaseDetail/CaseDetail";
