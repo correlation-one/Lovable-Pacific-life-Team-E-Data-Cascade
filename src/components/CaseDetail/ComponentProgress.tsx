@@ -97,6 +97,10 @@ export function ComponentProgress({
   const caseDocs = documents.filter((d) => d.caseId === caseData.id);
 
   // Calculate component data
+  const pendingReviewCount = caseDocs.filter((d) => d.conflicts.length > 0).length + 
+    caseEvidence.filter((e) => e.status === "received").length;
+  const totalReviewItems = caseDocs.length + caseEvidence.length;
+  
   const components: ComponentData[] = [
     {
       id: "application",
@@ -120,13 +124,25 @@ export function ComponentProgress({
       issueCount: caseGaps.filter((g) => g.status !== "closed").length,
       color: "hsl(38, 92%, 50%)", // Amber
     },
+    {
+      id: "review",
+      label: "Pending Review",
+      progress: totalReviewItems > 0
+        ? Math.round(((totalReviewItems - pendingReviewCount) / totalReviewItems) * 100)
+        : 100,
+      total: totalReviewItems,
+      completed: totalReviewItems - pendingReviewCount,
+      hasIssues: pendingReviewCount > 0,
+      issueCount: pendingReviewCount,
+      color: "hsl(262, 83%, 58%)", // Purple
+    },
   ];
 
   return (
     <div className="w-full bg-card border border-border rounded-lg shadow-sm p-4">
 
       {/* Component Grid */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {components.map((component) => (
           <Tooltip key={component.id}>
             <TooltipTrigger asChild>
