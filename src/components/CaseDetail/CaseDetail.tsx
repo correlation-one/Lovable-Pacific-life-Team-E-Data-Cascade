@@ -5,7 +5,6 @@ import { useCaseContext } from "@/context/CaseContext";
 import { CaseHeader } from "./CaseHeader";
 import { ComponentProgress } from "./ComponentProgress";
 import { CaseSnapshot } from "./CaseSnapshot";
-import { ActionableItems } from "./ActionableItems";
 import { DemoControls } from "./DemoControls";
 import { AIReconciliationDemo } from "./AIReconciliationDemo";
 import { HealthHistoryQuestions } from "./HealthHistoryQuestions";
@@ -172,25 +171,8 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
             </Tabs>
           </div>
 
-          {/* Right Side - Action Items + Demo Controls */}
+          {/* Right Side - Demo Controls */}
           <div className="col-span-12 lg:col-span-4 space-y-4">
-            <ActionableItems
-              gaps={gaps}
-              evidenceOrders={evidenceOrders}
-              documents={documents}
-              fieldVerifications={mockFieldVerifications}
-              caseId={selectedCase.id}
-              onCloseGap={closeGap}
-              onViewField={handleViewField}
-              onActionClick={(action) => {
-                if (action.type === "evidence" && action.title.includes("MVR")) {
-                  setShowAIDemo(true);
-                } else if (action.title.toLowerCase().includes("health history")) {
-                  setShowHealthHistory(true);
-                }
-              }}
-            />
-
             <DemoControls
               caseId={selectedCase.id}
               demoCompleted={demoCompleted}
