@@ -2,16 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
-  FileText,
   AlertTriangle,
   CheckCircle,
   Clock,
   TrendingUp,
-  Users,
   FileWarning,
-  Target,
 } from "lucide-react";
 import { Case, Gap, EvidenceOrder, JOURNEY_STAGES } from "@/types/case";
+import { cn } from "@/lib/utils";
 
 interface OverviewTabProps {
   caseData: Case;
@@ -29,178 +27,128 @@ export function OverviewTab({ caseData, gaps, evidenceOrders }: OverviewTabProps
     (e) => e.caseId === caseData.id && e.status === "received"
   );
 
+  const criticalGaps = openGaps.filter((g) => g.severity === "critical" || g.priority === "urgent");
+
   return (
-    <div className="space-y-6">
-      {/* Status Banner - Pizza Tracker Output */}
-      <Card className="border-primary/30 bg-primary/5">
-        <CardContent className="py-4">
+    <div className="space-y-4">
+      {/* Status Banner - simplified */}
+      <Card className={cn(
+        "border-l-4",
+        caseData.stageStatus === "blocked" ? "border-l-destructive bg-destructive/5" : "border-l-primary bg-primary/5"
+      )}>
+        <CardContent className="py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-primary/10">
-                <Target className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold">
-                  Whale Tracker – Status and visibility to internal and external parties
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Current Stage: {JOURNEY_STAGES[caseData.stage]} • Status:{" "}
-                  <span
-                    className={
-                      caseData.stageStatus === "blocked"
-                        ? "text-destructive"
-                        : caseData.stageStatus === "completed"
-                        ? "text-emerald-600"
-                        : "text-primary"
-                    }
-                  >
-                    {caseData.stageStatus.replace("-", " ").toUpperCase()}
-                  </span>
-                </p>
-              </div>
+            <div>
+              <p className="text-sm font-semibold">
+                {JOURNEY_STAGES[caseData.stage]}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Status:{" "}
+                <span
+                  className={cn(
+                    "font-medium",
+                    caseData.stageStatus === "blocked" && "text-destructive",
+                    caseData.stageStatus === "completed" && "text-emerald-600",
+                    caseData.stageStatus === "in-progress" && "text-primary"
+                  )}
+                >
+                  {caseData.stageStatus.replace("-", " ").toUpperCase()}
+                </span>
+              </p>
             </div>
-            <Badge
-              variant={caseData.stageStatus === "blocked" ? "destructive" : "default"}
-              className="text-sm"
-            >
-              Stage {caseData.stage} of 8
-            </Badge>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-2xl font-bold">{caseData.completenessScore}%</p>
+                <p className="text-[10px] text-muted-foreground uppercase">Complete</p>
+              </div>
+              <Progress value={caseData.completenessScore} className="w-20 h-2" />
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground flex items-center gap-1">
-              <TrendingUp className="w-3 h-3" />
-              Completeness
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold">{caseData.completenessScore}%</span>
-              <Progress value={caseData.completenessScore} className="w-20 h-2" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground flex items-center gap-1">
-              <AlertTriangle className="w-3 h-3" />
-              Open Gaps
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold">{openGaps.length}</span>
-              <span className="text-xs text-muted-foreground">
-                {closedGaps.length} closed
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground flex items-center gap-1">
-              <FileText className="w-3 h-3" />
-              Evidence Status
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold text-emerald-600">
-                {receivedEvidence.length}
-              </span>
-              <span className="text-xs">
-                {failedEvidence.length > 0 && (
-                  <span className="text-destructive">{failedEvidence.length} failed</span>
-                )}
-              </span>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs text-muted-foreground flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              Risk Flags
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-end justify-between">
-              <span className="text-2xl font-bold">{caseData.riskFlags.length}</span>
-              <span className="text-xs text-muted-foreground">active</span>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Gap Closure Confirmation */}
-      {closedGaps.length > 0 && (
-        <Card className="border-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm flex items-center gap-2 text-emerald-700 dark:text-emerald-400">
-              <CheckCircle className="w-4 h-4" />
-              Confirmation of gap closure
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-xs text-muted-foreground mb-2">
-              Outstanding data received and gaps are closed:
-            </p>
-            <div className="space-y-1.5">
-              {closedGaps.slice(0, 3).map((gap) => (
-                <div
-                  key={gap.id}
-                  className="flex items-center justify-between text-xs bg-white dark:bg-background rounded px-2 py-1.5"
-                >
-                  <span className="font-medium">{gap.description}</span>
-                  <Badge variant="outline" className="text-emerald-600 border-emerald-300">
-                    Closed
-                  </Badge>
-                </div>
-              ))}
+      {/* Critical Items Alert - if any */}
+      {(criticalGaps.length > 0 || failedEvidence.length > 0) && (
+        <Card className="border-destructive/50 bg-destructive/5">
+          <CardContent className="py-3">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="w-4 h-4 text-destructive flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-destructive">Requires Immediate Attention</p>
+                <ul className="text-xs text-muted-foreground mt-1 space-y-0.5">
+                  {criticalGaps.map((gap) => (
+                    <li key={gap.id}>• {gap.description}</li>
+                  ))}
+                  {failedEvidence.map((e) => (
+                    <li key={e.id}>• {e.type} retrieval failed: {e.failureReason}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Current Stage Checklist */}
+      {/* Key Metrics - condensed grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <MetricCard
+          icon={<TrendingUp className="w-4 h-4" />}
+          label="Progress"
+          value={`${caseData.completenessScore}%`}
+          subtext={`Stage ${caseData.stage}/8`}
+        />
+        <MetricCard
+          icon={<AlertTriangle className="w-4 h-4" />}
+          label="Open Gaps"
+          value={openGaps.length.toString()}
+          subtext={`${closedGaps.length} closed`}
+          alert={openGaps.length > 0}
+        />
+        <MetricCard
+          icon={<FileWarning className="w-4 h-4" />}
+          label="Evidence"
+          value={receivedEvidence.length.toString()}
+          subtext={failedEvidence.length > 0 ? `${failedEvidence.length} failed` : "All good"}
+          alert={failedEvidence.length > 0}
+        />
+        <MetricCard
+          icon={<Clock className="w-4 h-4" />}
+          label="Risk Flags"
+          value={caseData.riskFlags.length.toString()}
+          subtext="active"
+          alert={caseData.riskFlags.length > 0}
+        />
+      </div>
+
+      {/* Stage Checklist - simplified */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-sm flex items-center gap-2">
-            <FileText className="w-4 h-4" />
-            Stage {caseData.stage} Checklist: {JOURNEY_STAGES[caseData.stage]}
-          </CardTitle>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm">Current Stage Checklist</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {getStageChecklist(caseData.stage, caseData, openGaps, evidenceOrders).map(
               (item, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-2 text-sm"
+                  className={cn(
+                    "flex items-center gap-2 text-xs py-1 px-2 rounded",
+                    item.completed && "bg-emerald-50/50 dark:bg-emerald-950/20",
+                    item.blocked && "bg-destructive/5"
+                  )}
                 >
                   {item.completed ? (
-                    <CheckCircle className="w-4 h-4 text-emerald-500" />
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
                   ) : item.blocked ? (
-                    <AlertTriangle className="w-4 h-4 text-destructive" />
+                    <AlertTriangle className="w-3.5 h-3.5 text-destructive flex-shrink-0" />
                   ) : (
-                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    <Clock className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
                   )}
                   <span
-                    className={
-                      item.completed
-                        ? "text-muted-foreground line-through"
-                        : item.blocked
-                        ? "text-destructive"
-                        : ""
-                    }
+                    className={cn(
+                      item.completed && "text-muted-foreground",
+                      item.blocked && "text-destructive font-medium"
+                    )}
                   >
                     {item.label}
                   </span>
@@ -211,41 +159,60 @@ export function OverviewTab({ caseData, gaps, evidenceOrders }: OverviewTabProps
         </CardContent>
       </Card>
 
-      {/* Recent Activity */}
+      {/* Team Info - minimal */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-sm flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Team & Activity
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-xs text-muted-foreground mb-2">Current Owner</p>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm">
-                  {caseData.assignedTo.split(" ").map((n) => n[0]).join("")}
-                </div>
-                <div>
-                  <p className="text-sm font-medium">{caseData.assignedTo}</p>
-                  <p className="text-xs text-muted-foreground capitalize">
-                    {caseData.assignedTeam.replace("-", " ")}
-                  </p>
-                </div>
+        <CardContent className="py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-sm">
+                {caseData.assignedTo.split(" ").map((n) => n[0]).join("")}
+              </div>
+              <div>
+                <p className="text-sm font-medium">{caseData.assignedTo}</p>
+                <p className="text-xs text-muted-foreground capitalize">
+                  {caseData.assignedTeam.replace("-", " ")}
+                </p>
               </div>
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-2">Submission</p>
-              <p className="text-sm capitalize">{caseData.submissionChannel} channel</p>
-              <p className="text-xs text-muted-foreground">
-                Created: {new Date(caseData.createdDate).toLocaleDateString()}
-              </p>
+            <div className="text-right text-xs text-muted-foreground">
+              <p>Channel: {caseData.submissionChannel}</p>
+              <p>Created: {new Date(caseData.createdDate).toLocaleDateString()}</p>
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+function MetricCard({
+  icon,
+  label,
+  value,
+  subtext,
+  alert,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  subtext: string;
+  alert?: boolean;
+}) {
+  return (
+    <Card className={cn(alert && "border-amber-500/50")}>
+      <CardContent className="py-3 px-3">
+        <div className="flex items-center gap-2 mb-1">
+          <span className={cn("text-muted-foreground", alert && "text-amber-500")}>
+            {icon}
+          </span>
+          <span className="text-xs text-muted-foreground">{label}</span>
+        </div>
+        <div className="flex items-baseline gap-2">
+          <span className={cn("text-xl font-bold", alert && "text-amber-600")}>{value}</span>
+          <span className="text-[10px] text-muted-foreground">{subtext}</span>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -258,13 +225,13 @@ function getStageChecklist(
   const checklists: Record<number, { label: string; completed: boolean; blocked?: boolean }[]> = {
     1: [
       { label: "Application received", completed: true },
-      { label: "Initial data validation", completed: true },
-      { label: "Case created in system", completed: true },
+      { label: "Initial validation", completed: true },
+      { label: "Case created", completed: true },
     ],
     2: [
       { label: "Documents uploaded", completed: true },
-      { label: "OCR extraction completed", completed: caseData.completenessScore > 50 },
-      { label: "Field mapping verified", completed: caseData.completenessScore > 70 },
+      { label: "OCR completed", completed: caseData.completenessScore > 50 },
+      { label: "Fields mapped", completed: caseData.completenessScore > 70 },
     ],
     3: [
       { label: "Completeness check", completed: caseData.completenessScore > 60 },
@@ -272,28 +239,28 @@ function getStageChecklist(
       { label: "Conflicts resolved", completed: openGaps.filter((g) => g.type === "verification-needed").length === 0 },
     ],
     4: [
-      { label: "Evidence requirements identified", completed: evidenceOrders.length > 0 },
-      { label: "Prerequisites verified", completed: !evidenceOrders.some((e) => e.prerequisiteChecks.some((p) => p.status === "unmet")), blocked: evidenceOrders.some((e) => e.prerequisiteChecks.some((p) => p.status === "unmet")) },
-      { label: "Evidence orders submitted", completed: evidenceOrders.some((e) => e.status === "ordered" || e.status === "received") },
+      { label: "Evidence identified", completed: evidenceOrders.length > 0 },
+      { label: "Prerequisites met", completed: !evidenceOrders.some((e) => e.prerequisiteChecks.some((p) => p.status === "unmet")), blocked: evidenceOrders.some((e) => e.prerequisiteChecks.some((p) => p.status === "unmet")) },
+      { label: "Orders submitted", completed: evidenceOrders.some((e) => e.status === "ordered" || e.status === "received") },
     ],
     5: [
-      { label: "Application pre-filled", completed: caseData.completenessScore > 80 },
-      { label: "All sections reviewed", completed: caseData.completenessScore > 85 },
-      { label: "Ready for applicant signature", completed: caseData.completenessScore === 100 },
+      { label: "Pre-fill complete", completed: caseData.completenessScore > 80 },
+      { label: "Sections reviewed", completed: caseData.completenessScore > 85 },
+      { label: "Ready for signature", completed: caseData.completenessScore === 100 },
     ],
     6: [
-      { label: "Gaps identified and packaged", completed: true },
-      { label: "Information requests sent", completed: openGaps.some((g) => g.status !== "open") },
+      { label: "Gaps packaged", completed: true },
+      { label: "Requests sent", completed: openGaps.some((g) => g.status !== "open") },
       { label: "All gaps closed", completed: openGaps.length === 0, blocked: openGaps.length > 0 },
     ],
     7: [
-      { label: "All evidence received", completed: !evidenceOrders.some((e) => e.status !== "received" && e.caseId === caseData.id) },
-      { label: "UW review notification sent", completed: caseData.stage >= 7 },
-      { label: "Decision packet prepared", completed: caseData.stage >= 7 },
+      { label: "Evidence received", completed: !evidenceOrders.some((e) => e.status !== "received" && e.caseId === caseData.id) },
+      { label: "UW notified", completed: caseData.stage >= 7 },
+      { label: "Packet prepared", completed: caseData.stage >= 7 },
     ],
     8: [
-      { label: "Case summary complete", completed: true },
-      { label: "All verifications confirmed", completed: true },
+      { label: "Summary complete", completed: true },
+      { label: "Verifications confirmed", completed: true },
       { label: "Ready for export", completed: caseData.stage === 8 && caseData.stageStatus === "completed" },
     ],
   };

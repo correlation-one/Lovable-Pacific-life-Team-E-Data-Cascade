@@ -5,23 +5,17 @@ import { useCaseContext } from "@/context/CaseContext";
 import { CaseHeader } from "./CaseHeader";
 import { JourneyTracker } from "./JourneyTracker";
 import { CaseSnapshot } from "./CaseSnapshot";
-import { RightRail } from "./RightRail";
+import { ActionableItems } from "./ActionableItems";
 import { DemoControls } from "./DemoControls";
 import { OverviewTab } from "./Tabs/OverviewTab";
 import { DocumentsTab } from "./Tabs/DocumentsTab";
 import { EvidenceTab } from "./Tabs/EvidenceTab";
-import { PreFillTab } from "./Tabs/PreFillTab";
-import { GapsTab } from "./Tabs/GapsTab";
 import { AuditTrailTab } from "./Tabs/AuditTrailTab";
-import { getNextBestActions, getBlockers, mockEvidenceRules, mockApplicationSections, mockFieldVerifications } from "@/data/mockData";
+import { mockEvidenceRules, mockFieldVerifications } from "@/data/mockData";
 import {
   LayoutDashboard,
   FileText,
   Target,
-  FormInput,
-  AlertCircle,
-  Bell,
-  Package,
   History,
 } from "lucide-react";
 
@@ -53,12 +47,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
   const openGapsCount = gaps.filter(
     (g) => g.caseId === selectedCase.id && g.status !== "closed"
   ).length;
-  const evidenceIssuesCount = evidenceOrders.filter(
-    (e) => e.caseId === selectedCase.id && e.status === "failed"
-  ).length;
-
-  const nextBestActions = getNextBestActions(selectedCase.id);
-  const blockers = getBlockers(selectedCase.id);
+  const blockers = selectedCase.blockers?.length || 0;
 
   const handleSendNotification = (type: string) => {
     addNotification({
@@ -74,74 +63,67 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
     });
   };
 
+  const handleViewField = (fieldName: string, docId?: string) => {
+    // Switch to documents tab and highlight the field
+    setActiveTab("documents");
+    // In a real app, would scroll to and highlight the specific field
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <CaseHeader
         caseData={selectedCase}
         openGapsCount={openGapsCount}
-        evidenceIssuesCount={evidenceIssuesCount}
+        evidenceIssuesCount={evidenceOrders.filter(e => e.status === "failed").length}
         onBack={onBack}
       />
 
-      <div className="p-6 space-y-6">
-        <JourneyTracker
-          currentStage={selectedCase.stage}
-          stageStatus={selectedCase.stageStatus}
-          stageOwners={selectedCase.stageOwners}
-          stageETAs={selectedCase.stageETAs}
-          stageBlockers={selectedCase.stageBlockers}
-          activeTab={activeTab}
-        />
-
-        <div className="grid grid-cols-12 gap-6">
-          {/* Left: Case Snapshot */}
-          <div className="col-span-12 lg:col-span-2">
+      <div className="p-6 space-y-4">
+        {/* Compact Journey + Snapshot row */}
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 lg:col-span-9">
+            <JourneyTracker
+              currentStage={selectedCase.stage}
+              stageStatus={selectedCase.stageStatus}
+              stageOwners={selectedCase.stageOwners}
+              stageETAs={selectedCase.stageETAs}
+              stageBlockers={selectedCase.stageBlockers}
+              activeTab={activeTab}
+            />
+          </div>
+          <div className="col-span-12 lg:col-span-3">
             <CaseSnapshot
               caseData={selectedCase}
               openGapsCount={openGapsCount}
-              blockersCount={blockers.length}
+              blockersCount={blockers}
             />
           </div>
+        </div>
 
-          {/* Center: Main Workspace */}
-          <div className="col-span-12 lg:col-span-7">
+        <div className="grid grid-cols-12 gap-4">
+          {/* Main Workspace - wider */}
+          <div className="col-span-12 lg:col-span-8">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 mb-4">
+              <TabsList className="grid w-full grid-cols-4 mb-3">
                 <TabsTrigger value="overview" className="text-xs gap-1">
                   <LayoutDashboard className="w-3 h-3" />
-                  <span className="hidden sm:inline">Overview</span>
+                  Overview
                 </TabsTrigger>
                 <TabsTrigger value="documents" className="text-xs gap-1">
                   <FileText className="w-3 h-3" />
-                  <span className="hidden sm:inline">Docs</span>
+                  Documents
                 </TabsTrigger>
                 <TabsTrigger value="evidence" className="text-xs gap-1">
                   <Target className="w-3 h-3" />
-                  <span className="hidden sm:inline">Evidence</span>
-                </TabsTrigger>
-                <TabsTrigger value="prefill" className="text-xs gap-1">
-                  <FormInput className="w-3 h-3" />
-                  <span className="hidden sm:inline">Pre-Fill</span>
-                </TabsTrigger>
-                <TabsTrigger value="gaps" className="text-xs gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  <span className="hidden sm:inline">Gaps</span>
-                </TabsTrigger>
-                <TabsTrigger value="comms" className="text-xs gap-1">
-                  <Bell className="w-3 h-3" />
-                  <span className="hidden sm:inline">Comms</span>
-                </TabsTrigger>
-                <TabsTrigger value="packet" className="text-xs gap-1">
-                  <Package className="w-3 h-3" />
-                  <span className="hidden sm:inline">Packet</span>
+                  Evidence
                 </TabsTrigger>
                 <TabsTrigger value="audit" className="text-xs gap-1">
                   <History className="w-3 h-3" />
-                  <span className="hidden sm:inline">Audit</span>
+                  Audit Trail
                 </TabsTrigger>
               </TabsList>
 
-              <ScrollArea className="h-[calc(100vh-350px)]">
+              <ScrollArea className="h-[calc(100vh-380px)]">
                 <TabsContent value="overview" className="mt-0">
                   <OverviewTab caseData={selectedCase} gaps={gaps} evidenceOrders={evidenceOrders} />
                 </TabsContent>
@@ -151,22 +133,6 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
                 <TabsContent value="evidence" className="mt-0">
                   <EvidenceTab evidenceOrders={evidenceOrders} evidenceRules={mockEvidenceRules} caseId={selectedCase.id} />
                 </TabsContent>
-                <TabsContent value="prefill" className="mt-0">
-                  <PreFillTab sections={mockApplicationSections} />
-                </TabsContent>
-                <TabsContent value="gaps" className="mt-0">
-                  <GapsTab gaps={gaps} caseId={selectedCase.id} onCloseGap={closeGap} />
-                </TabsContent>
-                <TabsContent value="comms" className="mt-0">
-                  <div className="text-center py-8 text-muted-foreground">
-                    Notifications Center - {notifications.filter((n) => n.caseId === selectedCase.id).length} messages
-                  </div>
-                </TabsContent>
-                <TabsContent value="packet" className="mt-0">
-                  <div className="text-center py-8 text-muted-foreground">
-                    Decision Packet - {selectedCase.stage >= 7 ? "Ready" : "Not yet available"}
-                  </div>
-                </TabsContent>
                 <TabsContent value="audit" className="mt-0">
                   <AuditTrailTab events={auditEvents} caseId={selectedCase.id} />
                 </TabsContent>
@@ -174,8 +140,20 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
             </Tabs>
           </div>
 
-          {/* Right Rail */}
-          <div className="col-span-12 lg:col-span-3 space-y-4">
+          {/* Right Side - Action Items + Demo Controls */}
+          <div className="col-span-12 lg:col-span-4 space-y-4">
+            {/* Actionable Items - unified workbench */}
+            <ActionableItems
+              gaps={gaps}
+              evidenceOrders={evidenceOrders}
+              documents={documents}
+              fieldVerifications={mockFieldVerifications}
+              caseId={selectedCase.id}
+              onCloseGap={closeGap}
+              onViewField={handleViewField}
+            />
+
+            {/* Demo Controls - collapsed by default in production */}
             <DemoControls
               caseId={selectedCase.id}
               onToggleMissingDemographics={(m) => toggleMissingDemographics(selectedCase.id, m)}
@@ -183,15 +161,12 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               onOrderEvidence={() => orderEvidence(selectedCase.id, "MVR")}
               onToggleEvidenceFailure={(f) => toggleEvidenceFailure(selectedCase.id, f)}
               onReceiveEvidence={() => receiveEvidence(selectedCase.id, "MVR")}
-              onCloseGap={() => gaps.filter((g) => g.caseId === selectedCase.id && g.status !== "closed")[0] && closeGap(gaps.filter((g) => g.caseId === selectedCase.id && g.status !== "closed")[0].id)}
+              onCloseGap={() => {
+                const openGap = gaps.find((g) => g.caseId === selectedCase.id && g.status !== "closed");
+                if (openGap) closeGap(openGap.id);
+              }}
               onAdvanceStage={() => advanceStage(selectedCase.id)}
               onSendNotification={handleSendNotification}
-            />
-            <RightRail
-              nextBestActions={nextBestActions}
-              blockers={blockers}
-              watchers={["Sarah Chen", "Mike Johnson"]}
-              notes={["High-value case - expedite if possible"]}
             />
           </div>
         </div>
