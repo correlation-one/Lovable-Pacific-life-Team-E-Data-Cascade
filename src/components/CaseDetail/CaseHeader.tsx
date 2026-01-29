@@ -53,7 +53,7 @@ export function CaseHeader({
     : `${formatDistanceToNow(slaDue)} remaining`;
 
   return (
-    <div className="bg-card border-b border-border px-6 py-4">
+    <div className="bg-card border-b border-border px-6 py-4 sticky top-0 z-20 shadow-sm">
       <div className="flex items-center gap-4 mb-3">
         <Button
           variant="ghost"
