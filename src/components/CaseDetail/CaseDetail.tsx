@@ -188,6 +188,7 @@ export function CaseDetail({ onBack }: CaseDetailProps) {
               onAdvanceStage={() => advanceStage(selectedCase.id)}
               onSendNotification={handleSendNotification}
               onShowAIReconciliation={() => setShowAIDemo(true)}
+              onShowHealthHistory={() => setShowHealthHistory(true)}
               onResetDemo={resetDemo}
             />
           </div>
